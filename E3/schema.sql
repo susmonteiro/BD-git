@@ -91,7 +91,7 @@ create table prescricao(
     num_cedula int not null,
     num_doente int not null,
     _data date not null,
-    substancia varchar(50) not null,
+    substancia varchar(64) not null,
     quant integer not null,
     foreign key(num_cedula, num_doente, _data) references consulta(num_cedula, num_doente, _data) ON DELETE CASCADE,
     primary key(num_cedula, num_doente, _data, substancia)
@@ -109,29 +109,29 @@ create table analise(
     inst varchar(128) not null,
     foreign key(num_cedula, num_doente, _data) references consulta(num_cedula, num_doente, _data) ON DELETE CASCADE,
     foreign key(inst) references instituicao(nome) ON DELETE CASCADE,
-    constraint pk_analise primary key(num_analise)
+    primary key(num_analise)
 );
 
 create table venda_farmacia(
-    num_venda smallint not null unique,
+    num_venda smallint not null,
     data_registo date not null,
-    substancia varchar(50) not null,
+    substancia varchar(64) not null,
     quant integer not null,
     preco integer not null,
-    inst varchar(50) not null,
-    constraint fk_venda_farmacia_instituicao foreign key(inst) references instituicao(nome) ON DELETE CASCADE,
-    constraint pk_venda_farmacia primary key(num_venda)
+    inst varchar(128) not null,
+    foreign key(inst) references instituicao(nome) ON DELETE CASCADE,
+    primary key(num_venda)
 );
 
 create table prescricao_venda(
     num_cedula smallint not null,
     num_doente smallint not null,
     _data date not null,
-    substancia varchar(50) not null,
+    substancia varchar(64) not null,
     num_venda smallint not null,
-    constraint fk_prescricao_venda_venda_farmacia foreign key(num_venda) references venda_farmacia(num_venda) ON DELETE CASCADE,
-    constraint fk_prescricao_venda_prescricao foreign key(num_cedula, num_doente, _data, substancia) references prescricao(num_cedula, num_doente, _data, substancia) ON DELETE CASCADE,
-    constraint pk_prescricao_venda primary key(num_cedula, num_doente, _data, substancia, num_venda)
+    foreign key(num_venda) references venda_farmacia(num_venda) ON DELETE CASCADE,
+    foreign key(num_cedula, num_doente, _data, substancia) references prescricao(num_cedula, num_doente, _data, substancia) ON DELETE CASCADE,
+    primary key(num_cedula, num_doente, _data, substancia, num_venda)
 );
 
 

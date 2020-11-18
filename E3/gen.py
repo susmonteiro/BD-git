@@ -16,6 +16,8 @@ wb = openpyxl.load_workbook('concelhos.xlsx', data_only=True)
 allNumC = []
 allNumCedula = []
 allNumDoente = []
+allDatas = []
+allFarmacias = []
 for sName in wb.sheetnames:
     sheet = wb.get_sheet_by_name(sName)
     nRegiao = wb.sheetnames.index(sName)
@@ -42,9 +44,13 @@ while instFile:
     line  = instFile.readline()
     if line == "":
         break
+    tipo = random.choice(allInstTypes)
+    nome = line[:-1]
+    if tipo == 'farmacia':
+        allFarmacias.append(nome)
     # insert into instituicao values (nome, tipo, num_regiao, num_concelho)
-    outSql.write("insert into instituicao values ('" + line[:-1] + "', " + \
-        random.choice(allInstTypes) + ", " +  str(random.choice(allNumR)) + ", '" + str(random.choice(allNumC)) + "');\n")
+    outSql.write("insert into instituicao values ('" + nome + "', " + \
+        tipo + ", " +  str(random.choice(allNumR)) + ", '" + str(random.choice(allNumC)) + "');\n")
         
 instFile.close()
 
@@ -71,15 +77,68 @@ for i in range(1000):
     num_doente = str(random.randint(1000, 9999))
     allNumDoente.append(num_doente)
     data = "2020-" + str(random.randint(1,13)) + "-" + str(random.randint(1,31))
+    allDatas.append(data)
     outSql.write("insert into consulta values (" + str(random.choice(allNumCedula)) + ", " + num_doente + ", '" + data + "', '" + random.choice(instLines)[:-1] + "');\n")
 
 instFile.close()
 
+# Prescricao
+outSql.write("\n-- Prescricao\n")
+medFile = open('med.txt', "r")
+medLines = medFile.readlines()
+for i in range(500):
+    quant = random.randint(1,9)
+    outSql.write("insert into prescricao values (" + random.choice(allNumCedula) + ", " + random.choice(num_doente) + ", '" + random.choice(allDatas) + "', '" + random.choice(medLines)[:-1] + "', " + str(quant) + ");\n")
+medFile.close()
 
 
+# Analise 
+outSql.write("\n-- Analise\n")
+instFile = open("inst.txt", "r")
+instLines = instFile.readlines()
+for i in range(500):
+    num_analise = str(random.randint(1000, 9999))
+    outSql.write("insert into analise values (" +\
+        num_analise + ", '" + \
+        random.choice(especialidadeLines)[:-1] + "', " +\
+        random.choice(allNumCedula) + ", " + \
+        random.choice(allNumDoente) + ", '" + \
+        random.choice(allDatas) + "', '" + \
+        random.choice(allDatas) + "', '" + \
+        random.choice(nameLines)[:-1] + "', " + \
+        str(random.randint(1, 9)) + ", '" + \
+        random.choice(instLines)[:-1] + "');\n"
+    )    
+instFile.close()
 
 
+# Venda Farmacia
+outSql.write("\n-- Vende_Farmacia\n")
+allNumVenda = range(400)
+for i in allNumVenda:
+    quant = random.randint(1,9)
+    preco = random.randint(1,50)
+    outSql.write("insert into venda_farmacia values (" + \
+        str(i) + ", '" + \
+        random.choice(allDatas) + "', '" + \
+        random.choice(medLines)[:-1] + "', "+\
+        str(quant) + ", " + \
+        str(preco) + ", '" + \
+        random.choice(allFarmacias) + "');\n")
 
 
+# Prescricao Venda
+outSql.write("\n-- Prescricao_venda\n")
+
+for i in range(400):
+    quant = random.randint(1,9)
+    preco = random.randint(1,50)
+    outSql.write("insert into prescricao_venda values (" + \
+        random.choice(allNumCedula) + ", " + \
+        random.choice(allNumDoente) + ", '" + \
+        random.choice(allDatas) + "', '" + \
+        random.choice(medLines)[:-1] + "', " + \
+        str(random.choice(allNumVenda)) + ");\n")
+        
 
 outSql.close()
