@@ -50,8 +50,9 @@ while instFile:
     if tipo == 'farmacia':
         allFarmacias.append(nome)
     # insert into instituicao values (nome, tipo, num_regiao, num_concelho)
+    tpl = random.choice(allNumPlaces)
     outSql.write("insert into instituicao values ('" + nome + "', '" + \
-        tipo + "', " +  str(random.choice(allNumPlaces)[0]) + ", " + str(random.choice(allNumPlaces)[1]) + ");\n")
+        tipo + "', " +  str(tpl[0]) + ", " + str(tpl[1]) + ");\n")
         
 instFile.close()
 
