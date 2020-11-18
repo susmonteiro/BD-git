@@ -13,7 +13,7 @@ outSql.write("insert into regiao values ('5', 'Algarve', 438864);\n")
 # Concelhos
 outSql.write("\n-- Concelhos\n")
 wb = openpyxl.load_workbook('concelhos.xlsx', data_only=True)
-allNumC = []
+allNumPlaces = []
 allNumCedula = []
 allNumDoente = []
 allDatas = []
@@ -29,7 +29,8 @@ for sName in wb.sheetnames:
         nomeC = sheet[cell].value.title()
         cell = "E" + str(l) 
         numC = sheet[cell].value
-        allNumC.append(numC)
+        tpl = (nRegiao, numC)
+        allNumPlaces.append(tpl)
 
         # insert into concelho values (numC, numReg, nomeC, numHab)
         outSql.write("insert into concelho values (" + \
@@ -50,7 +51,7 @@ while instFile:
         allFarmacias.append(nome)
     # insert into instituicao values (nome, tipo, num_regiao, num_concelho)
     outSql.write("insert into instituicao values ('" + nome + "', '" + \
-        tipo + "', " +  str(random.choice(allNumR)) + ", '" + str(random.choice(allNumC)) + "');\n")
+        tipo + "', " +  str(random.choice(allNumPlaces)[0]) + ", '" + str(random.choice(allNumPlaces)[1]) + "');\n")
         
 instFile.close()
 
@@ -114,7 +115,7 @@ instFile.close()
 
 # Venda Farmacia
 outSql.write("\n-- Vende_Farmacia\n")
-allNumVenda = range(400)
+allNumVenda = range(1, 400)
 for i in allNumVenda:
     quant = random.randint(1,9)
     preco = random.randint(1,50)
