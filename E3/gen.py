@@ -4,11 +4,11 @@ outSql = open("fill.sql", "w")
 # Regioes
 allNumR = [1, 2, 3, 4, 5]
 outSql.write("-- Regioes\n")
-outSql.write("insert into regiao values ('1', 'Norte', 3573000);\n")
-outSql.write("insert into regiao values ('2', 'Centro', 2217000);\n")
-outSql.write("insert into regiao values ('3', 'Lisboa', 4457358);\n")
-outSql.write("insert into regiao values ('4', 'Alentejo', 234284);\n")
-outSql.write("insert into regiao values ('5', 'Algarve', 438864);\n")
+outSql.write("insert into regiao values (1, 'Norte', 3573000);\n")
+outSql.write("insert into regiao values (2, 'Centro', 2217000);\n")
+outSql.write("insert into regiao values (3, 'Lisboa', 4457358);\n")
+outSql.write("insert into regiao values (4, 'Alentejo', 234284);\n")
+outSql.write("insert into regiao values (5, 'Algarve', 438864);\n")
 
 # Concelhos
 outSql.write("\n-- Concelhos\n")
