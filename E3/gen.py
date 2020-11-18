@@ -53,7 +53,7 @@ while instFile:
     tpl = random.choice(allNumPlaces)
     outSql.write("insert into instituicao values ('" + nome + "', '" + \
         tipo + "', " +  str(tpl[0]) + ", " + str(tpl[1]) + ");\n")
-        
+
 instFile.close()
 
 
@@ -63,8 +63,9 @@ namesFile = open("names.txt", "r")
 nameLines = namesFile.readlines()
 especialidadeFile = open("especialidades.txt", "r")
 especialidadeLines = especialidadeFile.readlines()
-for i in range(150):
-    num_cedula = str(random.randint(1000, 9999))
+for i in range(1, 150):
+    # num_cedula = str(random.randint(1000, 9999))
+    num_cedula = str(i)
     allNumCedula.append(num_cedula)
     outSql.write("insert into medico values (" + num_cedula + ", '" + random.choice(nameLines)[:-1] + "', '" + random.choice(especialidadeLines)[:-1] + "');\n")
     
@@ -75,12 +76,18 @@ especialidadeFile.close()
 outSql.write("\n-- Consulta\n")
 instFile = open("inst.txt", "r")
 instLines = instFile.readlines()
+allConsulta = []
 for i in range(1000):
     num_doente = str(random.randint(1000, 9999))
     allNumDoente.append(num_doente)
-    data = "2020-" + str(random.randint(1,12)) + "-" + str(random.randint(1,31))
+    # data = "2020-" + str(random.randint(1,12)) + "-" + str(random.randint(1,31))
+    data = "2020-11-" + str(random.randint(1,30))
     allDatas.append(data)
-    outSql.write("insert into consulta values (" + str(random.choice(allNumCedula)) + ", " + num_doente + ", '" + data + "', '" + random.choice(instLines)[:-1] + "');\n")
+
+    tpl = (str(random.choice(allNumCedula)), num_doente, data)
+    allConsulta.append(tpl)
+
+    outSql.write("insert into consulta values (" + tpl[0] + ", " + tpl[1] + ", '" + tpl[2] + "', '" + random.choice(instLines)[:-1] + "');\n")
 
 instFile.close()
 
@@ -88,26 +95,37 @@ instFile.close()
 outSql.write("\n-- Prescricao\n")
 medFile = open('med.txt', "r")
 medLines = medFile.readlines()
+allPrescricao = []
 for i in range(500):
     quant = random.randint(1,9)
-    outSql.write("insert into prescricao values (" + random.choice(allNumCedula) + ", " + random.choice(num_doente) + ", '" + random.choice(allDatas) + "', '" + random.choice(medLines)[:-1] + "', " + str(quant) + ");\n")
+    subs = random.choice(medLines)[:-1]
+    tpl = random.choice(allConsulta)
+    # tpl_new = (tpl[0], tpl[1], tpl[2], subs)
+    tpl_new = list(tpl) + [subs]
+    allPrescricao.append(tpl_new)
+    outSql.write("insert into prescricao values (" + tpl[0] + ", " + tpl[1] + ", '" + tpl[2] + "', '" + subs + "', " + str(quant) + ");\n")
 medFile.close()
 
 
 # Analise 
 outSql.write("\n-- Analise\n")
 instFile = open("inst.txt", "r")
+analiseFile = open("analises.txt", "r")
+analiseLines = analiseFile.readlines()
 instLines = instFile.readlines()
-for i in range(500):
-    num_analise = str(random.randint(1000, 9999))
+for i in range(1, 500):
+    # num_analise = str(random.randint(1000, 9999))
+    num_analise = str(i) 
+    tpl = random.choice(allConsulta)
+
     outSql.write("insert into analise values (" +\
         num_analise + ", '" + \
         random.choice(especialidadeLines)[:-1] + "', " +\
-        random.choice(allNumCedula) + ", " + \
-        random.choice(allNumDoente) + ", '" + \
+        tpl[0] + ", " + \
+        tpl[1] + ", '" + \
+        tpl[2] + "', '" + \
         random.choice(allDatas) + "', '" + \
-        random.choice(allDatas) + "', '" + \
-        random.choice(nameLines)[:-1] + "', " + \
+        random.choice(analiseLines)[:-1].title() + "', " + \
         str(random.randint(1, 9)) + ", '" + \
         random.choice(instLines)[:-1] + "');\n"
     )    
@@ -135,11 +153,12 @@ outSql.write("\n-- Prescricao_venda\n")
 for i in range(400):
     quant = random.randint(1,9)
     preco = random.randint(1,50)
+    tpl = random.choice(allPrescricao)
     outSql.write("insert into prescricao_venda values (" + \
-        random.choice(allNumCedula) + ", " + \
-        random.choice(allNumDoente) + ", '" + \
-        random.choice(allDatas) + "', '" + \
-        random.choice(medLines)[:-1] + "', " + \
+        tpl[0] + ", " + \
+        tpl[1] + ", '" + \
+        tpl[2] + "', '" + \
+        tpl[3] + "', " + \
         str(random.choice(allNumVenda)) + ");\n")
         
 

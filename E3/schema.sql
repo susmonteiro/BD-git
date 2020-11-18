@@ -8,53 +8,18 @@ drop table prescricao cascade;
 drop table analise cascade;
 drop table venda_farmacia cascade;
 drop table prescricao_venda cascade;
--- drop table nome_regiao_const;
--- drop table nome_instituicao_const;
-
-
--- create table nome_regiao_const( 
--- 	nome varchar(16) not null
--- );
-
--- -- grant select on nome_regiao_const to user;
-
--- insert into nome_regiao_const
--- values
--- 	('Norte'),
--- 	('Centro'),
--- 	('Lisboa'),
--- 	('Alentejo'),
--- 	('Algarve');
-
-
-
--- create table nome_instituicao_const( 
--- 	nome varchar(16) not null
--- );
-
--- -- grant select on nome_instituicao_const to user;
-
--- insert into nome_instituicao_const
--- values
--- 	('farmacia'),
--- 	('laboratorio'),
--- 	('clinica'),
--- 	('hospital');
-
-
 
 create table regiao(
 	num_regiao smallint not null,
-	nome varchar(50) not null unique,
+	nome varchar(128) not null unique,
 	num_habitantes integer not null,
 	primary key(num_regiao)
 );
--- grant select on regiao to user;
 
 create table concelho(
 	num_concelho int not null,
 	num_regiao smallint not null, 
-	nome varchar(50) not null, 
+	nome varchar(128) not null, 
 	num_habitantes integer not null,
 	foreign key(num_regiao) references regiao(num_regiao),
 	primary key(num_concelho, num_regiao)
@@ -62,7 +27,7 @@ create table concelho(
 
 create table instituicao(
     nome varchar(128) not null,
-    tipo varchar(50) not null check(tipo in ('farmacia', 'laboratorio', 'clinica', 'hospital')),
+    tipo varchar(128) not null check(tipo in ('farmacia', 'laboratorio', 'clinica', 'hospital')),
     num_regiao int not null,
     num_concelho smallint not null,
     foreign key(num_regiao, num_concelho) references concelho(num_regiao, num_concelho),
@@ -71,8 +36,8 @@ create table instituicao(
 
 create table medico(
     num_cedula int not null,
-    nome varchar(50) not null,
-    especialidade varchar(50) not null,
+    nome varchar(128) not null,
+    especialidade varchar(128) not null,
     primary key(num_cedula)
 );
 
@@ -93,22 +58,22 @@ create table prescricao(
     _data date not null,
     substancia varchar(64) not null,
     quant integer not null,
-    foreign key(num_cedula, num_doente, _data) references consulta(num_cedula, num_doente, _data) ON DELETE CASCADE,
+    foreign key(num_cedula, num_doente, _data) references consulta(num_cedula, num_doente, _data),
     primary key(num_cedula, num_doente, _data, substancia)
 );
 
 create table analise(
     num_analise smallint not null,
-    especialidade varchar(50) not null,
+    especialidade varchar(128) not null,
     num_cedula int,
     num_doente int,
     _data date,
     data_registo date not null, 
-    nome varchar(50) not null, 
+    nome varchar(128) not null, 
     quant integer not null, 
     inst varchar(128) not null,
-    foreign key(num_cedula, num_doente, _data) references consulta(num_cedula, num_doente, _data) ON DELETE CASCADE,
-    foreign key(inst) references instituicao(nome) ON DELETE CASCADE,
+    foreign key(num_cedula, num_doente, _data) references consulta(num_cedula, num_doente, _data),
+    foreign key(inst) references instituicao(nome),
     primary key(num_analise)
 );
 
@@ -119,7 +84,7 @@ create table venda_farmacia(
     quant integer not null,
     preco integer not null,
     inst varchar(128) not null,
-    foreign key(inst) references instituicao(nome) ON DELETE CASCADE,
+    foreign key(inst) references instituicao(nome),
     primary key(num_venda)
 );
 
@@ -129,21 +94,7 @@ create table prescricao_venda(
     _data date not null,
     substancia varchar(64) not null,
     num_venda smallint not null,
-    foreign key(num_venda) references venda_farmacia(num_venda) ON DELETE CASCADE,
-    foreign key(num_cedula, num_doente, _data, substancia) references prescricao(num_cedula, num_doente, _data, substancia) ON DELETE CASCADE,
+    foreign key(num_venda) references venda_farmacia(num_venda),
+    foreign key(num_cedula, num_doente, _data, substancia) references prescricao(num_cedula, num_doente, _data, substancia),
     primary key(num_cedula, num_doente, _data, substancia, num_venda)
 );
-
-
-/* FUNCTIONS */
-/* 
-create function regiao_valida(nome_regiao varchar(50))
-	returns varchar(5)
-as
-$$
-begin
-	if exists (SELECT A.nome_regiao FROM nome_regiao_const AS A WHERE nome_regiao=A.nome_regiao) then
-		return 'True'
-	return 'False'
-end
-$$ language plpgsql; */

@@ -7,3 +7,5 @@
 > para as duas tabelas iniciais e' suposto ignorarmos as restricoes, portanto nao
 - no lab 1 (bank.sql) porque fazer constraint para chaves, sendo que o nome não é utilizado?
 > nao fazer (nao e' necessario)
+
+- é suposto o populate é suposto não haver erros quando carregamos para a base de dados? 
