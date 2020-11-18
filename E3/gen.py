@@ -49,8 +49,8 @@ while instFile:
     if tipo == 'farmacia':
         allFarmacias.append(nome)
     # insert into instituicao values (nome, tipo, num_regiao, num_concelho)
-    outSql.write("insert into instituicao values ('" + nome + "', " + \
-        tipo + ", " +  str(random.choice(allNumR)) + ", '" + str(random.choice(allNumC)) + "');\n")
+    outSql.write("insert into instituicao values ('" + nome + "', '" + \
+        tipo + "', " +  str(random.choice(allNumR)) + ", '" + str(random.choice(allNumC)) + "');\n")
         
 instFile.close()
 
@@ -76,7 +76,7 @@ instLines = instFile.readlines()
 for i in range(1000):
     num_doente = str(random.randint(1000, 9999))
     allNumDoente.append(num_doente)
-    data = "2020-" + str(random.randint(1,13)) + "-" + str(random.randint(1,31))
+    data = "2020-" + str(random.randint(1,12)) + "-" + str(random.randint(1,31))
     allDatas.append(data)
     outSql.write("insert into consulta values (" + str(random.choice(allNumCedula)) + ", " + num_doente + ", '" + data + "', '" + random.choice(instLines)[:-1] + "');\n")
 
