@@ -57,7 +57,7 @@ create table regiao(
 
 create table concelho(
 	-- num_concelho smallint not null,
-	num_concelho smallint not null unique,
+	num_concelho int not null unique,
 	-- num_regiao smallint not null, 
 	num_regiao smallint not null unique, 
 	nome varchar(50) not null unique, 
@@ -70,25 +70,25 @@ create table concelho(
 create table instituicao(
     nome varchar(50) not null,
     -- nome char(50) not null unique,
-    tipo varchar(50) not null check(tipo in ('farmacia', 'laboratorio', 'clinica', 'hospital')),
-    num_regiao smallint not null,
+    tipo varchar(128) not null check(tipo in ('farmacia', 'laboratorio', 'clinica', 'hospital')),
+    num_regiao int not null,
     num_concelho smallint not null,
     constraint fk_instituicao_concelho foreign key(num_regiao, num_concelho) references concelho(num_regiao, num_concelho) ON DELETE CASCADE,
     constraint pk_instituicao primary key(nome)
 );
 
 create table medico(
-    num_cedula smallint not null unique,
+    num_cedula int not null unique,
     nome varchar(50) not null,
     especialidade varchar(50) not null,
     constraint pk_medico primary key(num_cedula)
 );
 
 create table consulta(
-    num_cedula smallint not null,
+    num_cedula int not null,
     -- num_cedula smallint not null unique,
     -- num_doente smallint not null unique,
-    num_doente smallint not null unique,
+    num_doente int not null unique,
     _data date not null,
     -- _data date not null unique check (DATENAME(DW, _data) not in ('Saturday', 'Sunday')),
     nome_instituicao varchar(50) not null,
@@ -101,8 +101,8 @@ create table consulta(
 );
 
 create table prescricao(
-    num_cedula smallint not null,
-    num_doente smallint not null,
+    num_cedula int not null,
+    num_doente int not null,
     _data date not null,
     substancia varchar(50) not null,
     quant integer not null,
@@ -146,7 +146,6 @@ create table prescricao_venda(
     constraint fk_prescricao_venda_prescricao foreign key(num_cedula, num_doente, _data, substancia) references prescricao(num_cedula, num_doente, _data, substancia) ON DELETE CASCADE,
     constraint pk_prescricao_venda primary key(num_cedula, num_doente, _data, substancia, num_venda)
 );
-
 
 
 /* FUNCTIONS */
