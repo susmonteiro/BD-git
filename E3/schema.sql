@@ -44,60 +44,47 @@ drop table prescricao_venda cascade;
 
 
 create table regiao(
---     num_regiao smallint not null unique,
-	num_regiao smallint not null unique,
-	-- nome char(50) not null check(nome in ('Norte', 'Centro', 'Lisboa', 'Alentejo', 'Algarve')),
+	num_regiao smallint not null,
 	nome varchar(50) not null unique,
 	num_habitantes integer not null,
-	constraint pk_regiao primary key(num_regiao)
-    	-- check (regiao_valida(nome) = 'True')
-    -- porque renomear a primary key?
+	primary key(num_regiao)
 );
 -- grant select on regiao to user;
 
 create table concelho(
-	-- num_concelho smallint not null,
-	num_concelho int not null unique,
-	-- num_regiao smallint not null, 
-	num_regiao smallint not null unique, 
-	nome varchar(50) not null unique, 
-	-- verificar se o nome do concelho é real
+	num_concelho int not null,
+	num_regiao smallint not null, 
+	nome varchar(50) not null, 
 	num_habitantes integer not null,
-	constraint fk_concelho_regiao foreign key(num_regiao) references regiao(num_regiao) ON DELETE CASCADE ON UPDATE CASCADE,
-	constraint pk_concelho primary key(num_concelho, num_regiao)
+	foreign key(num_regiao) references regiao(num_regiao),
+	primary key(num_concelho, num_regiao)
 );
 
 create table instituicao(
-    nome varchar(50) not null,
-    -- nome char(50) not null unique,
-    tipo varchar(128) not null check(tipo in ('farmacia', 'laboratorio', 'clinica', 'hospital')),
+    nome varchar(128) not null,
+    tipo varchar(50) not null check(tipo in ('farmacia', 'laboratorio', 'clinica', 'hospital')),
     num_regiao int not null,
     num_concelho smallint not null,
-    constraint fk_instituicao_concelho foreign key(num_regiao, num_concelho) references concelho(num_regiao, num_concelho) ON DELETE CASCADE,
-    constraint pk_instituicao primary key(nome)
+    foreign key(num_regiao, num_concelho) references concelho(num_regiao, num_concelho),
+    primary key(nome)
 );
 
 create table medico(
-    num_cedula int not null unique,
+    num_cedula int not null,
     nome varchar(50) not null,
     especialidade varchar(50) not null,
-    constraint pk_medico primary key(num_cedula)
+    primary key(num_cedula)
 );
 
 create table consulta(
     num_cedula int not null,
-    -- num_cedula smallint not null unique,
-    -- num_doente smallint not null unique,
-    num_doente int not null unique,
-    _data date not null,
-    -- _data date not null unique check (DATENAME(DW, _data) not in ('Saturday', 'Sunday')),
-    nome_instituicao varchar(50) not null,
-    constraint fk_consulta_medico foreign key(num_cedula) references medico(num_cedula) ON DELETE CASCADE,
-    constraint fk_consulta_instituicao foreign key(nome_instituicao) references instituicao(nome) ON DELETE CASCADE,
-    constraint pk_consulta primary key(num_cedula, num_doente, _data)
-    -- check (SELECT A.num_doente, A.nome_instituicao, A._data 
-    --         FROM consulta AS A 
-    --         WHERE num_doente!=A.num_doente OR _data!=A._data OR nome_instituicao!=A.nome_instituicao)
+    num_doente int not null,
+    _data date not null check (EXTRACT(DOW FROM _data) not in (6,7)), -- ('Saturday', 'Sunday') 
+    nome_instituicao varchar(128) not null,
+    foreign key(num_cedula) references medico(num_cedula),
+    foreign key(nome_instituicao) references instituicao(nome),
+    primary key(num_cedula, num_doente, _data),
+    unique (num_doente, _data, nome_instituicao)
 );
 
 create table prescricao(
@@ -106,22 +93,22 @@ create table prescricao(
     _data date not null,
     substancia varchar(50) not null,
     quant integer not null,
-    constraint fk_prescricao_consulta foreign key(num_cedula, num_doente, _data) references consulta(num_cedula, num_doente, _data) ON DELETE CASCADE,
-    constraint pk_prescricao primary key(num_cedula, num_doente, _data, substancia)
+    foreign key(num_cedula, num_doente, _data) references consulta(num_cedula, num_doente, _data) ON DELETE CASCADE,
+    primary key(num_cedula, num_doente, _data, substancia)
 );
 
 create table analise(
-    num_analise smallint not null unique,
-    especialidade varchar(50) not null ,
-    num_cedula smallint,
-    num_doente smallint,
+    num_analise smallint not null,
+    especialidade varchar(50) not null,
+    num_cedula int,
+    num_doente int,
     _data date,
     data_registo date not null, 
     nome varchar(50) not null, 
     quant integer not null, 
-    inst varchar(50) not null,
-    constraint fk_analise_consulta foreign key(num_cedula, num_doente, _data) references consulta(num_cedula, num_doente, _data) ON DELETE CASCADE,
-    constraint fk_analise_instituicao foreign key(inst) references instituicao(nome) ON DELETE CASCADE,
+    inst varchar(128) not null,
+    foreign key(num_cedula, num_doente, _data) references consulta(num_cedula, num_doente, _data) ON DELETE CASCADE,
+    foreign key(inst) references instituicao(nome) ON DELETE CASCADE,
     constraint pk_analise primary key(num_analise)
 );
 

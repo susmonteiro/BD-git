@@ -60,6 +60,8 @@ for i in range(150):
     allNumCedula.append(num_cedula)
     outSql.write("insert into medico values (" + num_cedula + ", '" + random.choice(nameLines)[:-1] + "', '" + random.choice(especialidadeLines)[:-1] + "');\n")
     
+namesFile.close()
+especialidadeFile.close()
 
 # Consulta - num_cedula, num_doente, data, nome_instituicao
 outSql.write("\n-- Consulta\n")
@@ -69,17 +71,15 @@ for i in range(1000):
     num_doente = str(random.randint(1000, 9999))
     allNumDoente.append(num_doente)
     data = "2020-" + str(random.randint(1,13)) + "-" + str(random.randint(1,31))
-    outSql.write("insert into medico values (" + str(random.choice(allNumCedula)) + ", " + num_doente + ", '" + data + "', '" + random.choice(instLines)[:-1] + "');\n")
-
-
-
-
-
-
+    outSql.write("insert into consulta values (" + str(random.choice(allNumCedula)) + ", " + num_doente + ", '" + data + "', '" + random.choice(instLines)[:-1] + "');\n")
 
 instFile.close()
-namesFile.close()
-especialidadeFile.close()
+
+
+
+
+
+
 
 
 outSql.close()
