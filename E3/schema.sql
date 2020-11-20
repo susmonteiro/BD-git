@@ -32,7 +32,7 @@ create table instituicao(
     num_concelho smallint not null,
     foreign key(num_regiao, num_concelho) references concelho(num_regiao, num_concelho),
     primary key(nome)
-);
+); 
 
 create table medico(
     num_cedula int not null,
