@@ -56,7 +56,7 @@ def instituicaoEdit():
 
 @app.route('/instituicao/remove')
 def instituicaoRm():
-	body = '<form method="POST">\n'
+	body = '<form action="ri" method="post">\n'
 	body += '\t<label for="nome">Nome Instituicao:</label><br>\n'
 	body += '\t<input type="text" id="nome" name="nome"><br>\n'
 	body += '\t<input type="submit" value="Submit">\n'
@@ -64,19 +64,16 @@ def instituicaoRm():
 	return composeHTML("Remove", body)
 
 # /instituicoes/remove?nome="qq"&data=      {"nome": "qq"}
-@app.route('/instituicao/remove', methods=['POST'])
+@app.route('/instituicao/remove/ri', methods=['POST'])
 def instituicaoRmPOST():
-	if request.method == 'POST':
-		try:
-			print(request.form["nome"])
-			dbConn = psycopg2.connect(DB_CONNECTION_STRING)
-			cursor = dbConn.cursor(cursor_factory = psycopg2.extras.DictCursor)
-			query = "DELETE FROM instituicoes WHERE nome=(%s);"
-			cursor.execute(query, (request.args["nome"], ))
-			return cursor
-		except Exception as e:
-			print(e)
-	return "failsafe"
+    try:
+        dbConn = psycopg2.connect(DB_CONNECTION_STRING)
+        cursor = dbConn.cursor(cursor_factory = psycopg2.extras.DictCursor)
+        query = "DELETE FROM instituicao WHERE nome=(%s);"
+        cursor.execute(query, (request.form["nome"], ))
+        return cursor
+    except Exception as e:
+        return e
 	
 
 @app.route('/medico')
