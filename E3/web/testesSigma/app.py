@@ -36,7 +36,7 @@ def instituicao():
     body = "<h1>Intituicoes</h1>\n"
     body += "<p><a href='%s'>Inserir</p>\n" %url_for('instituicaoAdd')
     body += "<p><a href='%s'>Editar</p>\n" %url_for('instituicaoEdit')
-    body += "<p><a href='%s'>Remove</p>\n" %url_for('instituicaoRm')
+    body += "<p><a href='%s'>Remover</p>\n" %url_for('instituicaoRm')
     return composeHTML("Inserir Instituicao", body)    
 
 @app.route('/instituicao/add')
@@ -61,19 +61,26 @@ def instituicaoRm():
 	body += '\t<input type="text" id="nome" name="nome"><br>\n'
 	body += '\t<input type="submit" value="Submit">\n'
 	body += '</form>\n'
-	return composeHTML("Remove", body)
+	return composeHTML("Remover", body)
 
 # /instituicoes/remove?nome="qq"&data=      {"nome": "qq"}
 @app.route('/instituicao/remove/ri', methods=['POST'])
 def instituicaoRmPOST():
+    dbConn=None
+    cursor=None
     try:
         dbConn = psycopg2.connect(DB_CONNECTION_STRING)
         cursor = dbConn.cursor(cursor_factory = psycopg2.extras.DictCursor)
         query = "DELETE FROM instituicao WHERE nome=(%s);"
         cursor.execute(query, (request.form["nome"], ))
         return cursor
+        # return query
     except Exception as e:
-        return e
+        return str(e)
+    finally:
+        #dbConn.commit() # importante?
+        cursor.close()
+        dbConn.close()
 	
 
 @app.route('/medico')
@@ -81,7 +88,7 @@ def medico():
     body = "<h1>Medicos</h1>\n"
     body += "<p><a href='%s'>Inserir</p>\n" %url_for('medicoAdd')
     body += "<p><a href='%s'>Editar</p>\n" %url_for('medicoEdit')
-    body += "<p><a href='%s'>Remove</p>\n" %url_for('medicoRm')
+    body += "<p><a href='%s'>Remover</p>\n" %url_for('medicoRm')
     return composeHTML("Inserir Medico", body)
 
 @app.route('/medico/add')
@@ -102,7 +109,7 @@ def prescricao():
     body = "<h1>Prescricoes</h1>\n"
     body += "<p><a href='%s'>Inserir</p>\n" %url_for('prescricaoAdd')
     body += "<p><a href='%s'>Editar</p>\n" %url_for('prescricaoEdit')
-    body += "<p><a href='%s'>Remove</p>\n" %url_for('prescricaoRm')
+    body += "<p><a href='%s'>Remover</p>\n" %url_for('prescricaoRm')
     return composeHTML("Inserir Prescricao", body)
 
 @app.route('/prescricao/add')
@@ -122,7 +129,7 @@ def analise():
     body = "<h1>Analises</h1>\n"
     body += "<p><a href='%s'>Inserir</p>\n" %url_for('analiseAdd')
     body += "<p><a href='%s'>Editar</p>\n" %url_for('analiseEdit')
-    body += "<p><a href='%s'>Remove</p>\n" %url_for('analiseRm')
+    body += "<p><a href='%s'>Remover</p>\n" %url_for('analiseRm')
     return composeHTML("Inserir Analise", body)
 
 @app.route('/analise/add')
