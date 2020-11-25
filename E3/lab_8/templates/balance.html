@@ -1,0 +1,11 @@
+<html>
+    <body>
+        <h3>{{ name }}</h3>
+        <form action="{{ action }}" method="post">
+            {% for key in values.keys() %}
+            <p>{{ key }}: <input type="text" name="{{ values[key] }}"/></p>
+            {% endfor %}
+            <p><input type="submit" value="Submit"/></p>
+        </form>
+    </body>
+</html>
