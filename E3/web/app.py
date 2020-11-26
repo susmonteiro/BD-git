@@ -31,6 +31,7 @@ def home():
     return composeHTML("Home Page", body)
 
 
+#---------- Instituicao ----------#
 @app.route('/instituicao')
 def instituicao():
     body = "<h1>Intituicoes</h1>\n"
@@ -43,9 +44,9 @@ def instituicao():
 def instituicaoAdd():
     try:
         return render_template('operations.html', name= 'Inserir Instituicao', action= url_for('instituicaoAddDB'), \
-            values= {'Nome':'nome', 'Tipo': 'tipo', 'Numero de Regiao': 'num_regiao', 'Numero de Concelho': 'num_concelho'})
+            values= {'nome': 'Nome', 'tipo': 'Tipo', 'num_regiao': 'Numero de Regiao', 'num_concelho': 'Numero de Concelho'})
     except Exception as e:
-        return str(e)
+        return render_template('returnMainPage.html', action= url_for('home'), text=str(e))
     
 
 @app.route('/instituicao/add/ai', methods=['POST'])
@@ -57,9 +58,9 @@ def instituicaoAddDB():
         cursor = dbConn.cursor(cursor_factory = psycopg2.extras.DictCursor)
         query = 'INSERT INTO instituicao VALUES (%s, %s, %s, %s);'
         cursor.execute(query, (request.form['nome'], request.form['tipo'], request.form['num_regiao'], request.form['num_concelho']))
-        return 'Instituicao inserida com sucesso :)'
+        return render_template('returnMainPage.html', action= url_for('home'), text='Instituicao inserida com sucesso :)')
     except Exception as e:
-        return str(e)
+        return render_template('returnMainPage.html', action= url_for('home'), text=str(e))
     finally:
         dbConn.commit()
         cursor.close()
@@ -92,12 +93,14 @@ def instituicaoRmDB():
         return tuple(cursor)
         # return query
     except Exception as e:
-        return str(e)
+        return render_template('returnMainPage.html', action= url_for('home'), text=str(e))
     finally:
-        #dbConn.commit() # importante?
+        dbConn.commit()
         cursor.close()
         dbConn.close()
 
+
+#---------- Medico ----------#
 @app.route('/medico')
 def medico():
     body = "<h1>Medicos</h1>\n"
@@ -108,7 +111,29 @@ def medico():
 
 @app.route('/medico/add')
 def medicoAdd():
-	return "Under Construction"
+    try:
+        return render_template('operations.html', name= 'Inserir Medico', action= url_for('medicoAddDB'), \
+            values= {'num_cedula': 'Numero de Cedula', 'nome': 'Nome', 'especialidade': 'Especialidade' })
+    except Exception as e:
+        return render_template('returnMainPage.html', action= url_for('home'), text=str(e))
+
+@app.route('/medico/add/am', methods=['POST'])
+def medicoAddDB():
+    dbConn=None
+    cursor=None
+    try:
+        dbConn = psycopg2.connect(DB_CONNECTION_STRING)
+        cursor = dbConn.cursor(cursor_factory = psycopg2.extras.DictCursor)
+        query = 'INSERT INTO medico VALUES (%s, %s, %s);'
+        cursor.execute(query, (request.form['num_cedula'], request.form['nome'], request.form['especialidade']))
+        return render_template('returnMainPage.html', action= url_for('home'), text='Medico inserido com sucesso :)')
+    except Exception as e:
+        return render_template('returnMainPage.html', action= url_for('home'), text=str(e))
+    finally:
+        dbConn.commit()
+        cursor.close()
+        dbConn.close()
+        
 
 @app.route('/medico/edit')
 def medicoEdit():
@@ -119,6 +144,7 @@ def medicoRm():
 	return "Under Construction"
 
 
+#---------- Prescricao ----------#
 @app.route('/prescricao')
 def prescricao():
     body = "<h1>Prescricoes</h1>\n"
@@ -129,7 +155,30 @@ def prescricao():
 
 @app.route('/prescricao/add')
 def prescricaoAdd():
-	return "Under Construction"
+    try: 
+        return render_template('operations.html', name= 'Inserir Prescricao', action= url_for('prescricaoAddDB'),\
+            values= {'num_cedula': 'Numero de Cedula', 'num_doente': 'Numero de Doente', 'data': 'Data', 'substancia': 'Substancia', 'quant': 'Quantidade'}) 
+    except Exception as e: 
+        return render_template('returnMainPage.html', action= url_for('home'), text=str(e))
+
+
+@app.route('/prescricao/add/ap', methods=['POST'])
+def prescricaoAddDB():
+    dbConn=None
+    cursor=None
+    try:
+        dbConn = psycopg2.connect(DB_CONNECTION_STRING)
+        cursor = dbConn.cursor(cursor_factory = psycopg2.extras.DictCursor)
+        query = 'INSERT INTO prescricao VALUES (%s, %s, %s, %s, %s);'
+        cursor.execute(query, (request.form['num_cedula'], request.form['num_doente'], request.form['data'], request.form['substancia'], request.form['quant']))
+        return render_template('returnMainPage.html', action= url_for('home'), text='Prescricao inserida com sucesso :)')
+    except Exception as e:
+        return render_template('returnMainPage.html', action= url_for('home'), text=str(e))
+
+    finally:
+        dbConn.commit()
+        cursor.close()
+        dbConn.close()
 
 @app.route('/prescricao/edit')
 def prescricaoEdit():
@@ -139,6 +188,8 @@ def prescricaoEdit():
 def prescricaoRm():
 	return "Under Construction"
 
+
+#---------- Analise ----------#
 @app.route('/analise')
 def analise():
     body = "<h1>Analises</h1>\n"
@@ -149,7 +200,31 @@ def analise():
 
 @app.route('/analise/add')
 def analiseAdd():
-	return "Under Construction"
+    try:
+        return render_template('operations.html', name= 'Inserir Analise', action= url_for('analiseAddDB'),\
+            values= {'num_analise': 'Numero de Analise', 'especialidade': 'Especialidade','num_cedula': 'Numero de Cedula',\
+            'num_doente': 'Numero de Doente', 'data': 'Data', 'data_registo': 'Data de Registo', 'nome': 'Nome', 'quant': 'Quantidade', 'inst': 'Instituicao'})
+    except Exception as e: 
+        return render_template('returnMainPage.html', action= url_for('home'), text=str(e))
+
+@app.route('/analise/add/aa', methods=['POST'])
+def analiseAddDB():
+    dbConn=None
+    cursor=None
+    try:
+        dbConn = psycopg2.connect(DB_CONNECTION_STRING)
+        cursor = dbConn.cursor(cursor_factory = psycopg2.extras.DictCursor)
+        query = 'INSERT INTO analise VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);'
+        cursor.execute(query, (request.form['num_analise'], request.form['especialidade'], request.form['num_cedula'], request.form['num_doente'], \
+        request.form['data'], request.form['data_registo'], request.form['nome'], request.form['quant'], request.form['inst']))
+        return render_template('returnMainPage.html', action= url_for('home'), text='Analise inserida com sucesso :)')
+    except Exception as e:
+        return render_template('returnMainPage.html', action= url_for('home'), text=str(e))
+
+    finally:
+        dbConn.commit()
+        cursor.close()
+        dbConn.close()
 
 @app.route('/analise/edit')
 def analiseEdit():
@@ -157,7 +232,28 @@ def analiseEdit():
 
 @app.route('/analise/remove')
 def analiseRm():
-	return "Under Construction"
+    try:
+        return render_template('operations.html', name='Remover Analise', action=url_for('analiseRmDB'), values= {'num_analise': 'Numero de Analise'})
+    except Exception as e: 
+        return render_template('returnMainPage.html', action= url_for('home'), text=str(e))
+
+# /instituicoes/remove?nome="qq"&data=      {"nome": "qq"}
+@app.route('/analise/remove/ra', methods=['POST'])
+def analiseRmDB():
+    dbConn=None
+    cursor=None
+    try:
+        dbConn = psycopg2.connect(DB_CONNECTION_STRING)
+        cursor = dbConn.cursor(cursor_factory = psycopg2.extras.DictCursor)
+        query = 'DELETE FROM analise WHERE num_analise=(%s);'
+        cursor.execute(query, (request.form['num_analise'], ))
+        return render_template('returnMainPage.html', action= url_for('home'), text='Analise removida com sucesso :)')
+    except Exception as e:
+        return render_template('returnMainPage.html', action= url_for('home'), text=str(e))
+    finally:
+        dbConn.commit()
+        cursor.close()
+        dbConn.close()
 
 if __name__ == '__main__':
     app.run(debug = True, host='0.0.0.0')
