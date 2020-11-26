@@ -28,6 +28,7 @@ def home():
     body += "<p><a href='%s'>Medicos</p>\n" %url_for('medico')
     body += "<p><a href='%s'>Prescricoes</p>\n" %url_for('prescricao')
     body += "<p><a href='%s'>Analise</p>\n" %url_for('analise')
+    body += "<p><a href='%s'>Listar substancias</p>\n" %url_for('listarSubstancias')
     return composeHTML("Home Page", body)
 
 
@@ -46,7 +47,7 @@ def instituicaoAdd():
         return render_template('operations.html', name= 'Inserir Instituicao', action= url_for('instituicaoAddDB'), \
             values= {'nome': 'Nome', 'tipo': 'Tipo', 'num_regiao': 'Numero de Regiao', 'num_concelho': 'Numero de Concelho'})
     except Exception as e:
-        return render_template('returnMainPage.html', action= url_for('home'), text=str(e))
+        return render_template('returnMainPage.html', text=str(e))
     
 
 @app.route('/instituicao/add/ai', methods=['POST'])
@@ -58,9 +59,9 @@ def instituicaoAddDB():
         cursor = dbConn.cursor(cursor_factory = psycopg2.extras.DictCursor)
         query = 'INSERT INTO instituicao VALUES (%s, %s, %s, %s);'
         cursor.execute(query, (request.form['nome'], request.form['tipo'], request.form['num_regiao'], request.form['num_concelho']))
-        return render_template('returnMainPage.html', action= url_for('home'), text='Instituicao inserida com sucesso :)')
+        return render_template('returnMainPage.html', text='Instituicao inserida com sucesso :)')
     except Exception as e:
-        return render_template('returnMainPage.html', action= url_for('home'), text=str(e))
+        return render_template('returnMainPage.html', text=str(e))
     finally:
         dbConn.commit()
         cursor.close()
@@ -93,7 +94,7 @@ def instituicaoRmDB():
         return tuple(cursor)
         # return query
     except Exception as e:
-        return render_template('returnMainPage.html', action= url_for('home'), text=str(e))
+        return render_template('returnMainPage.html', text=str(e))
     finally:
         dbConn.commit()
         cursor.close()
@@ -115,7 +116,7 @@ def medicoAdd():
         return render_template('operations.html', name= 'Inserir Medico', action= url_for('medicoAddDB'), \
             values= {'num_cedula': 'Numero de Cedula', 'nome': 'Nome', 'especialidade': 'Especialidade' })
     except Exception as e:
-        return render_template('returnMainPage.html', action= url_for('home'), text=str(e))
+        return render_template('returnMainPage.html', text=str(e))
 
 @app.route('/medico/add/am', methods=['POST'])
 def medicoAddDB():
@@ -126,9 +127,9 @@ def medicoAddDB():
         cursor = dbConn.cursor(cursor_factory = psycopg2.extras.DictCursor)
         query = 'INSERT INTO medico VALUES (%s, %s, %s);'
         cursor.execute(query, (request.form['num_cedula'], request.form['nome'], request.form['especialidade']))
-        return render_template('returnMainPage.html', action= url_for('home'), text='Medico inserido com sucesso :)')
+        return render_template('returnMainPage.html', text='Medico inserido com sucesso :)')
     except Exception as e:
-        return render_template('returnMainPage.html', action= url_for('home'), text=str(e))
+        return render_template('returnMainPage.html', text=str(e))
     finally:
         dbConn.commit()
         cursor.close()
@@ -159,7 +160,7 @@ def prescricaoAdd():
         return render_template('operations.html', name= 'Inserir Prescricao', action= url_for('prescricaoAddDB'),\
             values= {'num_cedula': 'Numero de Cedula', 'num_doente': 'Numero de Doente', 'data': 'Data', 'substancia': 'Substancia', 'quant': 'Quantidade'}) 
     except Exception as e: 
-        return render_template('returnMainPage.html', action= url_for('home'), text=str(e))
+        return render_template('returnMainPage.html', text=str(e))
 
 
 @app.route('/prescricao/add/ap', methods=['POST'])
@@ -171,9 +172,9 @@ def prescricaoAddDB():
         cursor = dbConn.cursor(cursor_factory = psycopg2.extras.DictCursor)
         query = 'INSERT INTO prescricao VALUES (%s, %s, %s, %s, %s);'
         cursor.execute(query, (request.form['num_cedula'], request.form['num_doente'], request.form['data'], request.form['substancia'], request.form['quant']))
-        return render_template('returnMainPage.html', action= url_for('home'), text='Prescricao inserida com sucesso :)')
+        return render_template('returnMainPage.html', text='Prescricao inserida com sucesso :)')
     except Exception as e:
-        return render_template('returnMainPage.html', action= url_for('home'), text=str(e))
+        return render_template('returnMainPage.html', text=str(e))
 
     finally:
         dbConn.commit()
@@ -205,7 +206,7 @@ def analiseAdd():
             values= {'num_analise': 'Numero de Analise', 'especialidade': 'Especialidade','num_cedula': 'Numero de Cedula',\
             'num_doente': 'Numero de Doente', 'data': 'Data', 'data_registo': 'Data de Registo', 'nome': 'Nome', 'quant': 'Quantidade', 'inst': 'Instituicao'})
     except Exception as e: 
-        return render_template('returnMainPage.html', action= url_for('home'), text=str(e))
+        return render_template('returnMainPage.html', text=str(e))
 
 @app.route('/analise/add/aa', methods=['POST'])
 def analiseAddDB():
@@ -217,9 +218,9 @@ def analiseAddDB():
         query = 'INSERT INTO analise VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);'
         cursor.execute(query, (request.form['num_analise'], request.form['especialidade'], request.form['num_cedula'], request.form['num_doente'], \
         request.form['data'], request.form['data_registo'], request.form['nome'], request.form['quant'], request.form['inst']))
-        return render_template('returnMainPage.html', action= url_for('home'), text='Analise inserida com sucesso :)')
+        return render_template('returnMainPage.html', text='Analise inserida com sucesso :)')
     except Exception as e:
-        return render_template('returnMainPage.html', action= url_for('home'), text=str(e))
+        return render_template('returnMainPage.html', text=str(e))
 
     finally:
         dbConn.commit()
@@ -233,9 +234,10 @@ def analiseEdit():
 @app.route('/analise/remove')
 def analiseRm():
     try:
-        return render_template('operations.html', name='Remover Analise', action=url_for('analiseRmDB'), values= {'num_analise': 'Numero de Analise'})
+        return render_template('operations.html', name='Remover Analise', action=url_for('analiseRmDB'),\
+            values= {'num_analise': 'Numero de Analise'})
     except Exception as e: 
-        return render_template('returnMainPage.html', action= url_for('home'), text=str(e))
+        return render_template('returnMainPage.html', text=str(e))
 
 # /instituicoes/remove?nome="qq"&data=      {"nome": "qq"}
 @app.route('/analise/remove/ra', methods=['POST'])
@@ -247,13 +249,40 @@ def analiseRmDB():
         cursor = dbConn.cursor(cursor_factory = psycopg2.extras.DictCursor)
         query = 'DELETE FROM analise WHERE num_analise=(%s);'
         cursor.execute(query, (request.form['num_analise'], ))
-        return render_template('returnMainPage.html', action= url_for('home'), text='Analise removida com sucesso :)')
+        return render_template('returnMainPage.html', text='Analise removida com sucesso :)')
     except Exception as e:
-        return render_template('returnMainPage.html', action= url_for('home'), text=str(e))
+        return render_template('returnMainPage.html', text=str(e))
     finally:
         dbConn.commit()
         cursor.close()
         dbConn.close()
+
+@app.route('/listSub')
+def listarSubstancias():
+    try:
+        return render_template('operations.html', name='Listar Substancias', action=url_for('listarSubstanciasDB'),\
+            values = {'num_cedula': 'Numero de Cedula', 'mes': 'Mes', 'ano': 'Ano'})
+    except Exception as e:
+         return render_template('returnMainPage.html', text=str(e))
+
+@app.route('/listSub/ls', methods=['POST'])
+def listarSubstanciasDB():
+    dbConn=None
+    cursor=None
+    try:
+        dbConn = psycopg2.connect(DB_CONNECTION_STRING)
+        cursor = dbConn.cursor(cursor_factory = psycopg2.extras.DictCursor)
+        query = 'SELECT substancia FROM prescricao, EXTRACT(YEAR FROM _data) AS ano, EXTRACT(MONTH FROM _data) AS mes WHERE num_cedula = %s AND mes = %s AND ano = %s;'
+        cursor.execute(query, (request.form['num_cedula'], request.form['mes'], request.form['ano']))
+        #return ":)"
+        return render_template('list.html', header='Substancias:', cursor=cursor)
+    except Exception as e:
+        return render_template('returnMainPage.html', text=str(e))
+    finally:
+        dbConn.commit()
+        cursor.close()
+        dbConn.close()
+
 
 if __name__ == '__main__':
     app.run(debug = True, host='0.0.0.0')

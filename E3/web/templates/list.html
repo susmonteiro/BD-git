@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+    <h3>{{ header }}</h3>
+    <body>
+        {% if cursor %}
+            {% for record in cursor %}
+                <p>{{ record[0] }}</p>
+            {% endfor %}
+            <form action = '/'>
+                <p><input type="submit" value="Pagina Inicial"/></p>
+            </form>
+        {% else %}
+            <form action = '/'>
+                <p>Nao possivel obter os dados da base de dados</p>
+                <p><input type="submit" value="Pagina Inicial"/></p>
+            </form>
+        {% endif %}
+    </body>
+</html>
