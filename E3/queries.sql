@@ -1,7 +1,7 @@
 -- query 1
 WITH VV(num_regiao, num_concelho, nome, volume_vendas) AS
     (SELECT C.num_regiao, C.num_concelho, C.nome AS nome, SUM(V.preco) AS volume_vendas 
-    FROM venda_farmacia AS V, instituicao AS I, concelho AS C
+    roROM venda_farmacia AS V, instituicao AS I, concelho AS C
     WHERE V.data_registo=CURRENT_DATE AND  V.inst=I.nome AND I.num_concelho=C.num_concelho AND I.num_regiao=C.num_regiao
     GROUP BY C.num_regiao, C.num_concelho)
 SELECT VV.num_regiao, VV.num_concelho, VV.nome

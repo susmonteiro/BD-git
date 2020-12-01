@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<title>{{ title }}</title>
+<h3>{{ header }}</h3>
+<style>
+td {
+	padding-left: 15px;
+  }
+</style>
+<body style="padding:20px">
+	{% if data %}
+	<table border="2px" >
+		<thead>
+			<tr>
+				<th colspan="2">Concelho</th>
+				<th colspan="2">Minimo</th>
+				<th colspan="2">Maximo</th>
+			</tr>
+			
+			<tr>
+				<th>Numero de Regiao</th>
+				<th>Numero de Concelho</th>
+				<th>Numero de Doente</th>
+				<th>Glicemia</th>
+				<th>Numero de Doente</th>
+				<th>Glicemia</th>
+
+			</tr>
+		</thead>
+		<tbody>      
+			{% for lst in data %}
+			<tr>
+				<td>{{ lst[0] }}</td>
+				<td>{{ lst[1] }}</td>
+				<td>
+				{% for value in lst[2] %}
+				{{ value }} <br>
+				{% endfor %}
+				</td>
+				<td>{{ lst[3] }}</td>
+				<td>
+					{% for value in lst[4] %}
+					{{ value }} <br>
+					{% endfor %}
+					</td>
+				<td>{{ lst[5] }}</td>
+
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<form action = '/'>
+			<p><input type="submit" value="Pagina Inicial"/></p>
+	</form>
+	{% else %}
+	<form action = '/'>
+			<p>Nao possivel obter os dados da base de dados</p>
+			<p><input type="submit" value="Pagina Inicial"/></p>
+	</form>
+	{% endif %}
+	</body>
+	</html>
+	

@@ -164,7 +164,7 @@ for i in range(1, 800):
     num_analise = str(i) 
     tpl = random.choice(allConsulta)
 
-    if i % 25:
+    if i % 25 == 0:
         nome = "Glicémia"
     else:
         nome = random.choice(especialidadeLines)[:-1]

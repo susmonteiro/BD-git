@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<title>{{ title }}</title>
+<h3>{{ header }}</h3>
+<body style="padding:20px">
+	{% if cursor %}
+	<table border="2px">
+		<thead>
+			<tr>
+					{% for desc in cursor.description %}
+					<th>{{ desc[0] }}</th>
+					{% endfor %}
+			</tr>
+		</thead>
+		<tbody>      
+			<tr>
+				{% for record in cursor %}
+				<td>{{ record[0] }}</td>
+				<!-- {% endfor %} -->
+				{% endfor %}
+			</tr>
+		</tbody>
+	</table>
+	{% else %}
+	<p> Erro: ao obter dados da base de dados!</p>
+	{% endif %}
+	</body>
+	</html>
+	
+				<!-- {% for value in record %} -->
+
+
+<!-- <!DOCTYPE html>
+		<h3>{{ header }}</h3>
+		<body>
+				{% if cursor %}
+						{% for record in cursor %}
+								<p>{{ record[0] }}</p>
+						{% endfor %}
+						<form action = '/'>
+								<p><input type="submit" value="Pagina Inicial"/></p>
+						</form>
+				{% else %}
+						<form action = '/'>
+								<p>Nao possivel obter os dados da base de dados</p>
+								<p><input type="submit" value="Pagina Inicial"/></p>
+						</form>
+				{% endif %}
+		</body>
+</html> -->
