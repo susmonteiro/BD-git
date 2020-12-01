@@ -23,7 +23,6 @@ td {
 				<th>Glicemia</th>
 				<th>Numero de Doente</th>
 				<th>Glicemia</th>
-
 			</tr>
 		</thead>
 		<tbody>      
@@ -33,17 +32,16 @@ td {
 				<td>{{ lst[1] }}</td>
 				<td>
 				{% for value in lst[2] %}
-				{{ value }} <br>
+				{{ value }}<br>
 				{% endfor %}
 				</td>
 				<td>{{ lst[3] }}</td>
 				<td>
-					{% for value in lst[4] %}
-					{{ value }} <br>
-					{% endfor %}
-					</td>
+				{% for value in lst[4] %}
+				{{ value }}<br>
+				{% endfor %}
+				</td>
 				<td>{{ lst[5] }}</td>
-
 			</tr>
 			{% endfor %}
 		</tbody>

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 from flask import Flask, request, url_for, render_template  
+from datetime import date
 
 import psycopg2
 import psycopg2.extras
@@ -28,6 +29,7 @@ def home():
 	body += "<p><a href='%s'>Medicos</p>\n" %url_for('medico')
 	body += "<p><a href='%s'>Prescricoes</p>\n" %url_for('prescricao')
 	body += "<p><a href='%s'>Analise</p>\n" %url_for('analise')
+	body += "<p><a href='%s'>Realizar venda Farmacia</p>\n" %url_for('vendaFarm')
 	body += "<p><a href='%s'>Listar substancias</p>\n" %url_for('listarSubstancias')
 	body += "<p><a href='%s'>Listar glicemia</p>\n" %url_for('listarGlicemia')
 	return composeHTML("Home Page", body)
@@ -40,17 +42,17 @@ def instituicao():
 	body += "<p><a href='%s'>Inserir</p>\n" %url_for('instituicaoAdd')
 	body += "<p><a href='%s'>Editar</p>\n" %url_for('instituicaoEdit')
 	body += "<p><a href='%s'>Remover</p>\n" %url_for('instituicaoRm')
-	return composeHTML("Inserir Instituicao", body)    
+	return composeHTML("Instituicao", body)    
 
+# Adicionar instituicao
 @app.route('/instituicao/add')
 def instituicaoAdd():
 	try:
-		return render_template('operations.html', name= 'Inserir Instituicao', action= url_for('instituicaoAddDB'), \
+		return render_template('operations.html', title= 'Inserir Instituicao', name= 'Inserir Instituicao', action= url_for('instituicaoAddDB'), \
 			values= {'nome': 'Nome', 'tipo': 'Tipo', 'num_regiao': 'Numero de Regiao', 'num_concelho': 'Numero de Concelho'})
 	except Exception as e:
 		return render_template('returnMainPage.html', text=str(e))
 	
-
 @app.route('/instituicao/add', methods=['POST'])
 def instituicaoAddDB():
 	dbConn=None
@@ -60,7 +62,7 @@ def instituicaoAddDB():
 		cursor = dbConn.cursor(cursor_factory = psycopg2.extras.DictCursor)
 		query = 'INSERT INTO instituicao VALUES (%s, %s, %s, %s);'
 		cursor.execute(query, (request.form['nome'], request.form['tipo'], request.form['num_regiao'], request.form['num_concelho']))
-		return render_template('returnMainPage.html', text='Instituicao inserida com sucesso :)')
+		return render_template('returnMainPage.html', title= 'Resultado de Inserir Instituicao', text='Instituicao inserida com sucesso :)')
 	except Exception as e:
 		return render_template('returnMainPage.html', text=str(e))
 	finally:
@@ -68,21 +70,81 @@ def instituicaoAddDB():
 		cursor.close()
 		dbConn.close()
 
+
+# Editar Instituicao
 @app.route('/instituicao/edit')
 def instituicaoEdit():
-	return "Under Construction"
+	try:
+		return render_template('operations.html', name= 'Editar Instituicao', action= url_for('instituicaoEditDB'),\
+			edit= {'nome': 'Nome da Instituicao a editar'},\
+			values= {'tipo': 'Tipo', 'num_regiao': 'Numero de Regiao', 'num_concelho': 'Numero de Concelho'})
+	except Exception as e: 
+		return render_template('returnMainPage.html', text=str(e))
+	
+@app.route('/instituicao/edit', methods=['POST'])
+def instituicaoEditDB():
+	edits = ('nome',)
+	attr = ('tipo', 'num_regiao', 'num_concelho')
+	dbConn=None
+	cursor=None
+	try:
+		dbConn = psycopg2.connect(DB_CONNECTION_STRING)
+		cursor = dbConn.cursor(cursor_factory = psycopg2.extras.DictCursor)
+
+		# query
+		query_set = 'UPDATE instituicao SET'
+		query_where = ' WHERE'
+		args_set = tuple()
+		args_where = tuple()
+		for key in request.form:
+			if key in edits and request.form[key] == '':
+				raise Exception("Inserir a chave completa da Instituicao a editar") 
+			elif request.form[key] != '':  
+				if key in attr:
+					idx = attr.index(key)  # if index not found raise exception   
+					query_set += ' ' + attr[idx] + '=%s,'
+					args_set += (request.form[key], )
+				elif key in edits:
+					idx = edits.index(key)   # if index not found raise exception   
+					query_where += ' ' + edits[idx] + '=%s AND'
+					args_where += (request.form[key], )
+				# else ignore if key is not recognized
+
+		if not args_set:
+			raise Exception("Inserir pelo menos um parametro a alterar")
+		
+		query_set = query_set[:-1]
+		query_where = query_where[:-4]
+		query = query_set + query_where + ';'
+		args = tuple()
+		args = args_set + args_where
+		print(cursor.mogrify(query, args))
+		cursor.execute(query, args)
+
+		# results
+		if cursor.rowcount == 0:
+			return render_template('returnMainPage.html', text='Instituicao a editar nao existente :/')
+		else:
+			return render_template('returnMainPage.html', text='Instituicao editada com sucesso :)')
+
+	except Exception as e:
+		dbConn.rollback()
+		return render_template('returnMainPage.html', text=str(e))
+	finally:
+		dbConn.commit()
+		cursor.close()
+		dbConn.close()
 
 
+# Remover instituicao
 @app.route('/instituicao/remove')
 def instituicaoRm():
-	body = '<form action="%s" method="post">\n' %url_for('instituicaoRmDB')
-	body += '\t<label for="nome">Nome Instituicao:</label><br>\n'
-	body += '\t<input type="text" id="nome" name="nome"><br>\n'
-	body += '\t<input type="submit" value="Submit">\n'
-	body += '</form>\n'
-	return composeHTML("Remover", body)
+	try:
+		return render_template('operations.html', name='Remover instituicao', action=url_for('instituicaoRmDB'),\
+			values= {'nome': 'Nome da Instituicao'})
+	except Exception as e: 
+		return render_template('returnMainPage.html', text=str(e))
 
-# /instituicoes/remove?nome="qq"&data=      {"nome": "qq"}
 @app.route('/instituicao/remove', methods=['POST'])
 def instituicaoRmDB():
 	dbConn=None
@@ -90,11 +152,25 @@ def instituicaoRmDB():
 	try:
 		dbConn = psycopg2.connect(DB_CONNECTION_STRING)
 		cursor = dbConn.cursor(cursor_factory = psycopg2.extras.DictCursor)
+		query = 'DELETE FROM venda_farmacia WHERE inst=(%s);'
+		cursor.execute(query, (request.form['nome'], ))
+		query = 'DELETE FROM analise WHERE inst=(%s);'
+		cursor.execute(query, (request.form['nome'], ))
+		query = 'SELECT num_cedula, num_doente, _data FROM consulta WHERE nome_instituicao=(%s);'
+		cursor.execute(query, (request.form['nome'], ))
+		consulta = cursor.fetchall()
+		for entry in consulta:
+			query = 'DELETE FROM prescricao WHERE num_cedula=(%s) AND num_doente=(%s) AND _data=(%s);'
+			cursor.execute(query, entry)
+			query = 'DELETE FROM analise WHERE num_cedula=(%s) AND num_doente=(%s) AND _data=(%s);'
+			cursor.execute(query, entry)
+		query = 'DELETE FROM consulta WHERE nome_instituicao=(%s);'
+		cursor.execute(query, (request.form['nome'], ))
 		query = 'DELETE FROM instituicao WHERE nome=(%s);'
 		cursor.execute(query, (request.form['nome'], ))
-		return tuple(cursor)
-		# return query
+		return render_template('returnMainPage.html', text='instituicao removida com sucesso :)')
 	except Exception as e:
+		dbConn.rollback()
 		return render_template('returnMainPage.html', text=str(e))
 	finally:
 		dbConn.commit()
@@ -139,12 +215,99 @@ def medicoAddDB():
 
 @app.route('/medico/edit')
 def medicoEdit():
-	return "Under Construction"
+	try:
+		return render_template('operations.html', name= 'Editar Medico', action= url_for('medicoEditDB'),\
+			edit= {'num_cedula': 'Numero de Cedula a editar'},\
+			values= {'nome': 'Nome do Medico', 'especialidade': 'Especialidade'})
+	except Exception as e: 
+		return render_template('returnMainPage.html', text=str(e))
+	
+@app.route('/medico/edit', methods=['POST'])
+def medicoEditDB():
+	edits = ('num_cedula',)
+	attr = ('nome', 'especialidade')
+	dbConn=None
+	cursor=None
+	try:
+		dbConn = psycopg2.connect(DB_CONNECTION_STRING)
+		cursor = dbConn.cursor(cursor_factory = psycopg2.extras.DictCursor)
+
+		# query
+		query_set = 'UPDATE medico SET'
+		query_where = ' WHERE'
+		args_set = tuple()
+		args_where = tuple()
+		for key in request.form:
+			print(key)
+			if key in edits and request.form[key] == '':
+				raise Exception("Inserir a chave completa da Medico a editar.") 
+			elif request.form[key] != '':  
+				if key in attr:
+					idx = attr.index(key)   # if index not found raise exception   
+					query_set += ' ' + attr[idx] + '=%s,'
+					args_set += (request.form[key], )
+				elif key in edits:
+					idx = edits.index(key)   # if index not found raise exception   
+					query_where += ' ' + edits[idx] + '=%s AND'
+					args_where += (request.form[key], )
+
+		if not args_set:
+			raise Exception("Inserir pelo menos um parametro a alterar")
+		query_set = query_set[:-1]
+		query_where = query_where[:-4]
+		query = query_set + query_where + ';'
+		args = tuple()
+		args = args_set + args_where
+		print(cursor.mogrify(query, args))
+		cursor.execute(query, args)
+
+		# results
+		if cursor.rowcount == 0:
+			return render_template('returnMainPage.html', text='Medico a editar nao existente :/')
+		else:
+			return render_template('returnMainPage.html', text='Medico editado com sucesso :)')
+
+	except Exception as e:
+		dbConn.rollback()
+		return render_template('returnMainPage.html', text=str(e))
+	finally:
+		dbConn.commit()
+		cursor.close()
+		dbConn.close()
 
 @app.route('/medico/remove')
 def medicoRm():
-	return "Under Construction"
+	try:
+		return render_template('operations.html', name='Remover medico', action=url_for('medicoRmDB'),\
+			values= {'num_cedula': 'Numero de Cedula'})
+	except Exception as e: 
+		return render_template('returnMainPage.html', text=str(e))
 
+@app.route('/medico/remove', methods=['POST'])
+def medicoRmDB():
+	dbConn=None
+	cursor=None
+	try:
+		dbConn = psycopg2.connect(DB_CONNECTION_STRING)
+		cursor = dbConn.cursor(cursor_factory = psycopg2.extras.DictCursor)
+		query = 'DELETE FROM analise WHERE num_cedula=(%s);'
+		cursor.execute(query, (request.form['num_cedula'], ))
+		query = 'DELETE FROM prescricao_venda WHERE num_cedula=(%s);'
+		cursor.execute(query, (request.form['num_cedula'], ))
+		query = 'DELETE FROM prescricao WHERE num_cedula=(%s);'
+		cursor.execute(query, (request.form['num_cedula'], ))
+		query = 'DELETE FROM consulta WHERE num_cedula=(%s);'
+		cursor.execute(query, (request.form['num_cedula'], ))
+		query = 'DELETE FROM medico WHERE num_cedula=(%s);'
+		cursor.execute(query, (request.form['num_cedula'], ))
+		return render_template('returnMainPage.html', text='Medico removido com sucesso :)')
+	except Exception as e:
+		dbConn.rollback()
+		return render_template('returnMainPage.html', text=str(e))
+	finally:
+		dbConn.commit()
+		cursor.close()
+		dbConn.close()
 
 #---------- Prescricao ----------#
 @app.route('/prescricao')
@@ -182,13 +345,97 @@ def prescricaoAddDB():
 		cursor.close()
 		dbConn.close()
 
+
 @app.route('/prescricao/edit')
 def prescricaoEdit():
-	return "Under Construction"
+	try:
+		return render_template('operations.html', name= 'Editar Prescricao', action= url_for('prescricaoEditDB'),\
+			edit= {'num_cedula': 'Numero de Cedula a editar', 'num_doente': 'Numero de Doente a editar', \
+					'data': 'Data a Editar', 'substancia': 'Substancia a Editar'},\
+			values= {'quant': 'Nova Quantidade'})
+	except Exception as e: 
+		return render_template('returnMainPage.html', text=str(e))
+	
+@app.route('/prescricao/edit', methods=['POST'])
+def prescricaoEditDB():
+	edits = ('num_cedula', 'num_doente', '_data' ,'substancia')
+	attr = ('quant', )
+	dbConn=None
+	cursor=None
+	try:
+		dbConn = psycopg2.connect(DB_CONNECTION_STRING)
+		cursor = dbConn.cursor(cursor_factory = psycopg2.extras.DictCursor)
+
+		# query
+		query_set = 'UPDATE prescricao SET'
+		query_where = ' WHERE'
+		args_set = tuple()
+		args_where = tuple()
+		for key in request.form:
+			print(key)
+			if key in edits and request.form[key] == '':
+				raise Exception("Inserir a chave completa da prescricao a editar.") 
+			elif request.form[key] != '':  
+				if key in attr:
+					idx = attr.index(key)   # if index not found raise exception   
+					query_set += ' ' + attr[idx] + '=%s,'
+					args_set += (request.form[key], )
+				elif key in edits:
+					idx = edits.index(key)   # if index not found raise exception   
+					query_where += ' ' + edits[idx] + '=%s AND'
+					args_where += (request.form[key], )
+
+		if not args_set:
+			raise Exception("Inserir pelo menos um parametro a alterar")
+		query_set = query_set[:-1]
+		query_where = query_where[:-4]
+		query = query_set + query_where + ';'
+		args = tuple()
+		args = args_set + args_where
+		print(cursor.mogrify(query, args))
+		cursor.execute(query, args)
+
+		# results
+		if cursor.rowcount == 0:
+			return render_template('returnMainPage.html', text='Prescricao a editar nao existente :/')
+		else:
+			return render_template('returnMainPage.html', text='Prescricao editada com sucesso :)')
+
+	except Exception as e:
+		dbConn.rollback()
+		return render_template('returnMainPage.html', text=str(e))
+	finally:
+		dbConn.commit()
+		cursor.close()
+		dbConn.close()
 
 @app.route('/prescricao/remove')
 def prescricaoRm():
-	return "Under Construction"
+	try:
+		return render_template('operations.html', name='Remover Prescricao', action=url_for('prescricaoRmDB'),\
+			values= {'num_cedula': 'Numero de Cedula', 'num_doente': 'Numero de Doente', '_data': 'Data', 'substancia': 'Substancia'})
+	except Exception as e: 
+		return render_template('returnMainPage.html', text=str(e))
+
+@app.route('/prescricao/remove', methods=['POST'])
+def prescricaoRmDB():
+	dbConn=None
+	cursor=None
+	try:
+		dbConn = psycopg2.connect(DB_CONNECTION_STRING)
+		cursor = dbConn.cursor(cursor_factory = psycopg2.extras.DictCursor)
+		query = 'DELETE FROM prescricao_venda WHERE num_cedula=(%s) AND num_doente=(%s) AND _data=(%s) AND substancia=(%s);'
+		cursor.execute(query, (request.form['num_cedula'], request.form['num_doente'], request.form['_data'], request.form['substancia']))
+		query = 'DELETE FROM prescricao WHERE num_cedula=(%s) AND num_doente=(%s) AND _data=(%s) AND substancia=(%s);'
+		cursor.execute(query, (request.form['num_cedula'], request.form['num_doente'], request.form['_data'], request.form['substancia']))
+		return render_template('returnMainPage.html', text='Prescricao removida com sucesso :)')
+	except Exception as e:
+		dbConn.rollback()
+		return render_template('returnMainPage.html', text=str(e))
+	finally:
+		dbConn.commit()
+		cursor.close()
+		dbConn.close()
 
 
 #---------- Analise ----------#
@@ -231,8 +478,8 @@ def analiseAddDB():
 @app.route('/analise/edit')
 def analiseEdit():
 	try:
-		return render_template('operations.html', name= 'Numero de Analise', action= url_for('analiseEditDB'),\
-			values= {'num_analise_edit': 'Numero de Analise a editar', 'num_analise': 'Numero de Analise', 'especialidade': 'Especialidade','num_cedula': 'Numero de Cedula',\
+		return render_template('operations.html', name= 'Editar Analise', action= url_for('analiseEditDB'), edit={'num_analise_edit': 'Numero de Analise a editar'},\
+			values= {'num_analise': 'Numero de Analise', 'especialidade': 'Especialidade','num_cedula': 'Numero de Cedula',\
 			'num_doente': 'Numero de Doente', '_data': 'Data', 'data_registo': 'Data de Registo', 'nome': 'Nome', 'quant': 'Quantidade', 'inst': 'Instituicao'})
 	except Exception as e: 
 		return render_template('returnMainPage.html', text=str(e))
@@ -330,7 +577,6 @@ def listarSubstanciasDB():
 		print(str(e))
 		return render_template('returnMainPage.html', text='Argumentos invalidos.')
 	finally:
-		dbConn.commit()
 		cursor.close()
 		dbConn.close()
 
@@ -345,20 +591,20 @@ def listarGlicemia():
 	queryMax = queryHead + "\n" + \
 		"SELECT EG.num_regiao, EG.num_concelho, EG.num_doente, EG.quant\
 		FROM EG, (\
-		SELECT num_regiao, num_concelho, MAX(quant) AS maxQ\
-		FROM EG\
-		GROUP BY (num_regiao, num_concelho)\
-		) AS M\
+			SELECT num_regiao, num_concelho, MAX(quant) AS maxQ\
+			FROM EG\
+			GROUP BY (num_regiao, num_concelho)\
+			) AS M\
 		WHERE EG.num_regiao=M.num_regiao AND EG.num_concelho=M.num_concelho AND EG.quant=M.maxQ\
 		ORDER BY (EG.num_regiao, EG.num_concelho);"
 
 	queryMin = queryHead + "\n" + \
 		"SELECT EG.num_regiao, EG.num_concelho, EG.num_doente, EG.quant\
 		FROM EG, (\
-		SELECT num_regiao, num_concelho, MIN(quant) AS minQ\
-		FROM EG\
-		GROUP BY (num_regiao, num_concelho)\
-		) AS M\
+			SELECT num_regiao, num_concelho, MIN(quant) AS minQ\
+			FROM EG\
+			GROUP BY (num_regiao, num_concelho)\
+			) AS M\
 		WHERE EG.num_regiao=M.num_regiao AND EG.num_concelho=M.num_concelho AND EG.quant=M.minQ\
 		ORDER BY (EG.num_regiao, EG.num_concelho);"
 
@@ -372,7 +618,7 @@ def listarGlicemia():
 		cursor.execute(queryMin)
 		minVect = cursor.fetchall()
 
-		resVect = [] #[num_reg, num_concelho, [num_doenteMIN,..], minQuant, [num_doenteMAX,..], maxQuant,]
+		resVect = [] #[[num_reg, num_concelho, [num_doenteMIN,..], minQuant, [num_doenteMAX,..], maxQuant]]
 
 		while len(minVect) != 0 and len(maxVect) != 0:
 			newVect = []
@@ -381,24 +627,25 @@ def listarGlicemia():
 			newMaxDoeVect = []
 			newMaxQuan = 0
 
-			newVect = maxVect[0][:2]
+			newVect = maxVect[0][:2] # [num_reg, num_concelho]
+			
 			while len(maxVect) != 0:
 				maxlst = maxVect[0]
 				if newVect[0] != maxlst[0] or newVect[1] != maxlst[1]: #numReg e numConc diferentes
 					break
 
-				while len(minVect) != 0:
-					minlst = minVect[0]
-					if newVect[0] != minlst[0] or newVect[1] != minlst[1]: #numReg e numConc diferentes
-						break
-
-					newMinDoeVect.append(minlst[2]) 	# add num_doente e quantidade
-					newMinQuan = minlst[3]
-					minVect = minVect[1:]		# update vector
-
 				newMaxDoeVect.append(maxlst[2]) 	# add num_doente e quantidade
 				newMaxQuan = maxlst[3]
 				maxVect = maxVect[1:]		# update vector
+
+			while len(minVect) != 0:
+				minlst = minVect[0]
+				if newVect[0] != minlst[0] or newVect[1] != minlst[1]: #numReg e numConc diferentes
+					break
+
+				newMinDoeVect.append(minlst[2]) 	# add num_doente e quantidade
+				newMinQuan = minlst[3]
+				minVect = minVect[1:]		# update vector
 
 			newVect.append(newMinDoeVect)
 			newVect.append(newMinQuan)
@@ -407,14 +654,112 @@ def listarGlicemia():
 
 			resVect.append(newVect)
 
-
 		return render_template('listdouble.html', header='Glicemia Minimo e Maximo por Concelho:', data=resVect)
 	except Exception as e:
+		return render_template('returnMainPage.html', text=str(e))
+	finally:
+		cursor.close()
+		dbConn.close()
+
+
+
+@app.route('/venda')
+def vendaFarm():
+	try:
+		return render_template('operations.html', name='Venda Farmacia', action=url_for('vendaFarmDB'),\
+			values = {'substancia': 'Substancia', 'quant': 'Quantidade', 'preco': 'Preco', 'inst': 'Instituicao', 'num_doente': 'Numero de Doente'})
+	except Exception as e:
+		 return render_template('returnMainPage.html', text=str(e))
+
+
+def inserirVendaFarm(cursor, request):	
+	attr = ('substancia', 'quant', 'preco' ,'inst')
+
+	# get num_venda
+	query = 'SELECT MAX(num_venda) FROM venda_farmacia;'
+	cursor.execute(query)
+	num_venda = cursor.fetchone()[0] + 1
+
+	# data de hoje
+	today = date.today()
+	data_registo = today.strftime("%Y-%m-%d")
+	
+	# query venda_farmacia
+	queryhead = 'INSERT INTO venda_farmacia ('
+	querytail = 'VALUES ('
+	args = tuple()
+	for key in request.form:
+		if key == 'num_doente':
+			continue
+		elif request.form[key] != '':  
+			idx = attr.index(key)   # if index not found raise exception   
+			queryhead += attr[idx] + ', '
+			querytail += '%s, '
+			args += (request.form[key], )
+	
+	queryhead += 'num_venda, data_registo) '
+	querytail += '%s, %s);'
+	args += (num_venda, data_registo)
+	query = queryhead + querytail
+	print(query%args)        
+	cursor.execute(query, args)
+	return num_venda
+
+def inserirPrescrVenda(cursor, request, num_venda, num_doente):
+	queryVenda = 'SELECT substancia , quant FROM venda_farmacia WHERE num_venda = ' + str(num_venda)
+	cursor.execute(queryVenda)
+	res = cursor.fetchone()
+	subst = res[0]
+	quant_venda = res[1]
+
+	queryPresc = 'SELECT num_cedula, _data, quant FROM prescricao WHERE num_doente = %s AND substancia = %s AND quant >= %s' 
+	cursor.execute(queryPresc, (num_doente, subst, quant_venda))
+	
+	if cursor.rowcount == 0:
+		return "Doente nao tem prescricao valida associada. \nVenda Farmacia realizada com sucesso."
+	else:
+		presc = cursor.fetchone()
+		query = 'INSERT INTO prescricao_venda VALUES (%s, %s, %s, %s, %s);'
+		cursor.execute(query, (presc[0], num_doente, presc[1], subst, num_venda))
+
+		# Atualiza valor da quantidade da prescricao
+		quant_presc = presc[2]
+		quant = quant_presc - quant_venda 
+		query = 'UPDATE prescricao SET quant=%s WHERE num_cedula=%s AND num_doente=%s AND _data=%s AND substancia=%s;'
+		cursor.execute(query, (quant, presc[0], num_doente, presc[1], subst))
+
+		return "Doente tem prescricao valida associada. \nPrescricao Venda e Venda Farmacia realizadas com sucesso."
+
+	
+		
+@app.route('/venda', methods=['POST'])
+def vendaFarmDB():
+	
+	dbConn=None
+	cursor=None
+	try:
+		dbConn = psycopg2.connect(DB_CONNECTION_STRING)
+		cursor = dbConn.cursor(cursor_factory = psycopg2.extras.DictCursor)
+		
+		# inserir venda_farmacia
+		num_venda = inserirVendaFarm(cursor, request)
+		
+		# query prescricao
+		if request.form['num_doente'] != '':
+			resStr = inserirPrescrVenda(cursor, request, num_venda, request.form['num_doente'])
+		else:
+			resStr = "Venda Farmacia realizada com sucesso."
+		
+		return render_template('returnMainPage.html', text=resStr)
+
+	except Exception as e:
+		dbConn.rollback()
 		return render_template('returnMainPage.html', text=str(e))
 	finally:
 		dbConn.commit()
 		cursor.close()
 		dbConn.close()
+
 
 
 if __name__ == '__main__':

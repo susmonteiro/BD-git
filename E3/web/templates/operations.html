@@ -1,7 +1,14 @@
 <!DOCTYPE html>
+    <title>{{ title }}</title>
     <body>
         <h3>{{ name }}</h3>
         <form action="{{ action }}" method="post">
+            {% if edit %}
+                {% for key in edit.keys() %}
+                <p>{{ edit[key] }}: <input type="text" name="{{ key }}"/></p>
+                {% endfor %}
+                <br>
+            {% endif %}
             {% for key in values.keys() %}
             <p>{{ values[key] }}: <input type="text" name="{{ key }}"/></p>
             {% endfor %}
