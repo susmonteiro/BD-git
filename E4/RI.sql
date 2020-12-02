@@ -43,46 +43,47 @@ begin
         FROM medico
         WHERE num_cedula = new.num_cedula;
         raise notice 'Especialidade atualizada: %', new.especialidade;
-
-        return new;
     end if;
+    
+    return new;
+    
 end
 $$language plpgsql;
 
-drop trigger especialidade_med on analise;
-create trigger especialidade_med before insert on analise
-for each row execute procedure especialidade_med_proc();
+-- drop trigger especialidade_med on analise;
+-- create trigger especialidade_med before insert on analise
+-- for each row execute procedure especialidade_med_proc();
 
 
 
 
-create or replace function especialidade_med_proc()
-returns trigger as
-$$
-declare med_especial varchar;
-begin
+-- create or replace function especialidade_med_proc()
+-- returns trigger as
+-- $$
+-- declare med_especial varchar;
+-- begin
 
-    if new.num_cedula is not null AND 
-        new.num_doente is not null AND 
-        new._data is not null then
+--    if new.num_cedula is not null AND 
+--        new.num_doente is not null AND 
+--        new._data is not null then
 
-        SELECT especialidade into med_especial
-        FROM medico
-        WHERE num_cedula = new.num_cedula;
+--        SELECT especialidade into med_especial
+--        FROM medico
+--        WHERE num_cedula = new.num_cedula;
 
-        if new.especialidade != med_especial then
-            raise exception 'Especialidade do Medico (%) nao corresponde com a da analise (%).',
-                med_especial, new.especialidade;
-        else
-            return new;
-        end if;
-    else
-        return new;
-    end if;
+--        if new.especialidade != med_especial then
+--           raise exception 'Especialidade do Medico (%) nao corresponde com a da analise (%).',
+--                med_especial, new.especialidade;
+--        else
+--            return new;
+--        end if;
+--    else
+--        return new;
+--    end if;
 
-end
-$$language plpgsql;
+--end
+--$$language plpgsql;
 
-drop trigger especialidade_med on analise;
-create trigger especialidade_med before insert on analise
-for each row execute procedure especialidade_med_proc();
+--drop trigger especialidade_med on analise;
+--create trigger especialidade_med before insert on analise
+--for each row execute procedure especialidade_med_proc();
