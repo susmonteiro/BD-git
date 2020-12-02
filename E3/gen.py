@@ -164,19 +164,19 @@ for i in range(1, 800):
     num_analise = str(i) 
     tpl = random.choice(allConsulta)
 
-    if i % 25 == 0:
+    if i % 8 == 0:
         nome = "Glicémia"
     else:
-        nome = random.choice(especialidadeLines)[:-1]
+        nome = random.choice(especialidadeLines)[:-1].title()
 
     outSql.write("insert into analise values (" +\
         num_analise + ", '" + \
-        nome + "', " +\
+        random.choice(especialidadeLines)[:-1].title() + "', " + \
         tpl[0] + ", " + \
         tpl[1] + ", '" + \
         tpl[2] + "', '" + \
         random.choice(allDatas) + "', '" + \
-        random.choice(analiseLines)[:-1].title() + "', " + \
+        nome + "', " +\
         str(random.randint(1, 9)) + ", '" + \
         random.choice(instLines)[:-1] + "');\n"
     )    
