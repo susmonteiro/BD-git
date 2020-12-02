@@ -168,7 +168,7 @@ def instituicaoRmDB():
 		cursor.execute(query, (request.form['nome'], ))
 		query = 'DELETE FROM instituicao WHERE nome=(%s);'
 		cursor.execute(query, (request.form['nome'], ))
-		return render_template('returnMainPage.html', text='instituicao removida com sucesso :)')
+		return render_template('returnMainPage.html', text='Instituicao removida com sucesso :)')
 	except Exception as e:
 		dbConn.rollback()
 		return render_template('returnMainPage.html', text=str(e))
@@ -240,7 +240,7 @@ def medicoEditDB():
 		for key in request.form:
 			print(key)
 			if key in edits and request.form[key] == '':
-				raise Exception("Inserir a chave completa da Medico a editar.") 
+				raise Exception("Inserir a chave completa do Medico a editar.") 
 			elif request.form[key] != '':  
 				if key in attr:
 					idx = attr.index(key)   # if index not found raise exception   
