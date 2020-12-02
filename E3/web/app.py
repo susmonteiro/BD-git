@@ -24,7 +24,7 @@ app = Flask(__name__)
 @app.route('/index.html')
 @app.route('/')
 def home():
-	body = "<h1>Pagina Inicial</h1>\n"
+	body = "<h1>Sistema de Informação ODISSEIA</h1>\n"
 	body += "<p><a href='%s'>Instituicoes</p>\n" %url_for('instituicao')
 	body += "<p><a href='%s'>Medicos</p>\n" %url_for('medico')
 	body += "<p><a href='%s'>Prescricoes</p>\n" %url_for('prescricao')
