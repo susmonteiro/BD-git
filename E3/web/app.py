@@ -586,7 +586,7 @@ def listarGlicemia():
 	queryHead = "WITH EG(num_regiao, num_concelho, num_doente, quant) AS \
 				(SELECT I.num_regiao, I.num_concelho, A.num_doente, A.quant\
 				FROM instituicao AS I, analise AS A\
-				WHERE I.nome = A.inst AND A.especialidade='Glicémia')"
+				WHERE I.nome = A.inst AND A.nome='Glicémia')"
 
 	queryMax = queryHead + "\n" + \
 		"SELECT EG.num_regiao, EG.num_concelho, EG.num_doente, EG.quant\
