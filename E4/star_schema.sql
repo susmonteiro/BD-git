@@ -13,7 +13,7 @@ create table d_tempo(
     mes int not null,
     trimestre int not null,
     ano int not null,
-    primary Key(id_tempo)
+    primary key(id_tempo)
 );
 
 create table d_instituicao(
@@ -29,14 +29,14 @@ create table d_instituicao(
 );
 
 create table f_presc_venda(
-    id_presc_venda int not null,
+    id_presc_venda smallint not null, -- unique?
     id_medico int not null,
     num_doente int not null,
     id_data_registo int not null,
     id_inst int not null,
     substancia varchar(50) not null,
     quant int not null,
-    foreign key(id_presc_venda) references venda_farmacia(num_venda), --??????
+    foreign key(id_presc_venda) references prescricao_venda(num_venda), --??????
     foreign key(id_medico) references medico(num_cedula),
     foreign key(id_data_registo) references d_tempo(id_tempo),
     foreign key(id_inst) references d_instituicao(id_inst),
@@ -45,10 +45,10 @@ create table f_presc_venda(
 );
 
 create table f_analise(
-    id_analise int not null,
+    id_analise smallint not null, 
     id_medico int not null,
     num_doente int not null,
-    id_data_registo serial not null,
+    id_data_registo int not null,
     id_inst int not null,
     nome varchar(50) not null,
     quant int not null,
@@ -72,6 +72,7 @@ insert into d_tempo(dia, dia_da_semana, semana, mes, trimestre, ano)
     from consulta
     order by dia, mes, ano;
     -- data da consulta ou ver data de analise e data de prescricao_venda???
+    -- escrever no relatorio: assumimos que id_data_registo refere-se a _data em ambas as tabelas
 
 insert into d_instituicao(nome, tipo, num_regiao, num_concelho)
     select nome, tipo, num_regiao, num_concelho from instituicao;
