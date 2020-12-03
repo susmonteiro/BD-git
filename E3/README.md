@@ -23,9 +23,9 @@
 - caso a quantidade de venda seja superior a quantidade da prescricao para uma dada substancia e' suposto considerarmos que o doente nao tem prescricao?
 
 ## ToDo:
-# Relatorio:
+#### Relatorio:
 - explicar que substraímos a quantidade comprada à da prescricao quando é feita uma venda 
 - explicar que quando a quantidade de venda é superior à da prescricao, então consideramos que o doente não tem prescricao
 
-# app.cgi
+#### app.cgi
 - returnMainPage.html não funciona porque '/' agora é uma coisa diferente
