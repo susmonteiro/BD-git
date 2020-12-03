@@ -34,8 +34,9 @@ def home():
 	body += "<p><a href='%s'>Listar glicemia</p>\n" %url_for('listarGlicemia')
 	return composeHTML("Home Page", body)
 
-
-#---------- Instituicao ----------#
+#---------------------------------#
+#           Instituicao           #
+#---------------------------------#
 @app.route('/instituicao')
 def instituicao():
 	body = "<h1>Intituicoes</h1>\n"
@@ -44,7 +45,7 @@ def instituicao():
 	body += "<p><a href='%s'>Remover</p>\n" %url_for('instituicaoRm')
 	return composeHTML("Instituicao", body)    
 
-# Adicionar instituicao
+#------ Adicionar instituicao ------#
 @app.route('/instituicao/add')
 def instituicaoAdd():
 	try:
@@ -71,7 +72,7 @@ def instituicaoAddDB():
 		dbConn.close()
 
 
-# Editar Instituicao
+#------ Editar Instituicao ------#
 @app.route('/instituicao/edit')
 def instituicaoEdit():
 	try:
@@ -136,7 +137,7 @@ def instituicaoEditDB():
 		dbConn.close()
 
 
-# Remover instituicao
+#------ Remover instituicao ------#
 @app.route('/instituicao/remove')
 def instituicaoRm():
 	try:
@@ -177,8 +178,9 @@ def instituicaoRmDB():
 		cursor.close()
 		dbConn.close()
 
-
-#---------- Medico ----------#
+#----------------------------#
+#           Medico           #
+#----------------------------#
 @app.route('/medico')
 def medico():
 	body = "<h1>Medicos</h1>\n"
@@ -187,6 +189,7 @@ def medico():
 	body += "<p><a href='%s'>Remover</p>\n" %url_for('medicoRm')
 	return composeHTML("Inserir Medico", body)
 
+#------ Adicionar medico ------#
 @app.route('/medico/add')
 def medicoAdd():
 	try:
@@ -212,7 +215,7 @@ def medicoAddDB():
 		cursor.close()
 		dbConn.close()
 		
-
+#------ Editar medico ------#
 @app.route('/medico/edit')
 def medicoEdit():
 	try:
@@ -275,6 +278,7 @@ def medicoEditDB():
 		cursor.close()
 		dbConn.close()
 
+#------ Remover medico ------#
 @app.route('/medico/remove')
 def medicoRm():
 	try:
@@ -309,7 +313,9 @@ def medicoRmDB():
 		cursor.close()
 		dbConn.close()
 
-#---------- Prescricao ----------#
+#--------------------------------#
+#           Prescricao           #
+#--------------------------------#
 @app.route('/prescricao')
 def prescricao():
 	body = "<h1>Prescricoes</h1>\n"
@@ -318,6 +324,7 @@ def prescricao():
 	body += "<p><a href='%s'>Remover</p>\n" %url_for('prescricaoRm')
 	return composeHTML("Inserir Prescricao", body)
 
+#------ Adicionar prescricao ------#
 @app.route('/prescricao/add')
 def prescricaoAdd():
 	try: 
@@ -345,7 +352,7 @@ def prescricaoAddDB():
 		cursor.close()
 		dbConn.close()
 
-
+#------ Editar prescricao ------#
 @app.route('/prescricao/edit')
 def prescricaoEdit():
 	try:
@@ -409,6 +416,7 @@ def prescricaoEditDB():
 		cursor.close()
 		dbConn.close()
 
+#------ Remover prescricao ------#
 @app.route('/prescricao/remove')
 def prescricaoRm():
 	try:
@@ -437,8 +445,9 @@ def prescricaoRmDB():
 		cursor.close()
 		dbConn.close()
 
-
-#---------- Analise ----------#
+#-----------------------------#
+#           Analise           #
+#-----------------------------#
 @app.route('/analise')
 def analise():
 	body = "<h1>Analises</h1>\n"
@@ -447,6 +456,7 @@ def analise():
 	body += "<p><a href='%s'>Remover</p>\n" %url_for('analiseRm')
 	return composeHTML("Inserir Analise", body)
 
+#------ Adicionar analise ------#
 @app.route('/analise/add')
 def analiseAdd():
 	try:
@@ -475,6 +485,7 @@ def analiseAddDB():
 		cursor.close()
 		dbConn.close()
 
+#------ Editar analise ------#
 @app.route('/analise/edit')
 def analiseEdit():
 	try:
@@ -526,6 +537,7 @@ def analiseEditDB():
 		cursor.close()
 		dbConn.close()
 
+#------ Remover analise ------#
 @app.route('/analise/remove')
 def analiseRm():
 	try:
@@ -552,6 +564,9 @@ def analiseRmDB():
 		cursor.close()
 		dbConn.close()
 
+#-----------------------------#
+#        Listar Subst         #
+#-----------------------------#
 @app.route('/listSub')
 def listarSubstancias():
 	try:
@@ -580,7 +595,9 @@ def listarSubstanciasDB():
 		cursor.close()
 		dbConn.close()
 
-
+#-----------------------------#
+#       Listar Glicemia       #
+#-----------------------------#
 @app.route('/listGli')
 def listarGlicemia():
 	queryHead = "WITH EG(num_regiao, num_concelho, num_doente, quant) AS \
@@ -662,7 +679,9 @@ def listarGlicemia():
 		dbConn.close()
 
 
-
+#-----------------------------#
+#            Venda            #
+#-----------------------------#
 @app.route('/venda')
 def vendaFarm():
 	try:
@@ -671,7 +690,7 @@ def vendaFarm():
 	except Exception as e:
 		 return render_template('returnMainPage.html', text=str(e))
 
-
+#------ Venda Farmacia ------#
 def inserirVendaFarm(cursor, request):	
 	attr = ('substancia', 'quant', 'preco' ,'inst')
 
@@ -705,6 +724,7 @@ def inserirVendaFarm(cursor, request):
 	cursor.execute(query, args)
 	return num_venda
 
+#------ Prescricao Venda ------#
 def inserirPrescrVenda(cursor, request, num_venda, num_doente):
 	queryVenda = 'SELECT substancia , quant FROM venda_farmacia WHERE num_venda = ' + str(num_venda)
 	cursor.execute(queryVenda)
@@ -730,7 +750,7 @@ def inserirPrescrVenda(cursor, request, num_venda, num_doente):
 
 		return "Doente tem prescricao valida associada. \nPrescricao Venda e Venda Farmacia realizadas com sucesso."
 
-	
+
 		
 @app.route('/venda', methods=['POST'])
 def vendaFarmDB():
