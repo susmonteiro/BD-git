@@ -46,11 +46,11 @@ td {
 			{% endfor %}
 		</tbody>
 	</table>
-	<form action = '/'>
+	<form action = "{{ url_for('home') }}">
 			<p><input type="submit" value="Pagina Inicial"/></p>
 	</form>
 	{% else %}
-	<form action = '/'>
+	<form action = "{{ url_for('home') }}">
 			<p>Nao possivel obter os dados da base de dados</p>
 			<p><input type="submit" value="Pagina Inicial"/></p>
 	</form>

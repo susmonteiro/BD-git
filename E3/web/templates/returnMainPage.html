@@ -1,7 +1,7 @@
 <!DOCTYPE html>
     <title>{{ title }}</title>
     <body>
-        <form action = '/'>
+        <form action="{{ url_for('home') }}">
             <p>{{ text }}</p>
             <p><input type="submit" value="Pagina Inicial"/></p>
         </form>
