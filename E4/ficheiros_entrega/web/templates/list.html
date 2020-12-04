@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<title>{{ title }}</title>
+<h3>{{ header }}</h3>
+<body style="padding:20px">
+	{% if cursor %}
+	<table border="2px">
+		<thead>
+			<tr>
+					{% for desc in cursor.description %}
+					<th>{{ desc[0] }}</th>
+					{% endfor %}
+			</tr>
+		</thead>
+		<tbody>      
+			{% for record in cursor %}
+			<tr>
+				{% for value in record %}
+				<td>{{ value }}</td>
+				{% endfor %}
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<form action = "{{ url_for('home') }}">
+			<p><input type="submit" value="Pagina Inicial"/></p>
+	</form>
+	{% else %}
+	<form action = "{{ url_for('home') }}">
+			<p>Nao possivel obter os dados da base de dados</p>
+			<p><input type="submit" value="Pagina Inicial"/></p>
+	</form>
+	{% endif %}
+	</body>
+	</html>
+	
