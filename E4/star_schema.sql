@@ -1,4 +1,4 @@
---Eliminar tabelas que podem ter sido criadas anteriomente com o mesmo nome
+--Eliminar tabelas que podem ter sido criadas anteriormente com o mesmo nome
 drop table if exists d_tempo cascade;
 drop table if exists d_instituicao cascade;
 drop table if exists f_presc_venda cascade;
@@ -6,7 +6,7 @@ drop table if exists f_analise cascade;
 
 --Adicionar restricao
 ALTER TABLE prescricao_venda
-drop CONSTRAINT if exists Unique_num_venda;
+DROP CONSTRAINT if exists Unique_num_venda;
 
 ALTER TABLE prescricao_venda
 ADD CONSTRAINT Unique_num_venda UNIQUE(num_venda);
@@ -36,19 +36,18 @@ create table d_instituicao(
 );
 
 create table f_presc_venda(
-    id_presc_venda smallint not null, -- unique?
+    id_presc_venda smallint not null, 
     id_medico int not null,
     num_doente int not null,
     id_data_registo int not null,
     id_inst int not null,
     substancia varchar(64) not null,
     quant int not null,
-    foreign key(id_presc_venda) references prescricao_venda(num_venda), --??????
+    foreign key(id_presc_venda) references prescricao_venda(num_venda), 
     foreign key(id_medico) references medico(num_cedula),
     foreign key(id_data_registo) references d_tempo(id_tempo),
     foreign key(id_inst) references d_instituicao(id_inst),
     primary key(id_presc_venda)
-    --primary key(id_presc_venda, id_medico, id_data_registo, id_inst)
 );
 
 create table f_analise(
@@ -64,5 +63,4 @@ create table f_analise(
     foreign key(id_data_registo) references d_tempo(id_tempo),
     foreign key(id_inst) references d_instituicao(id_inst),
     primary key(id_analise)
-    --primary key(id_analise, id_medico, id_data_registo, id_inst)
 );
