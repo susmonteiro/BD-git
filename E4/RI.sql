@@ -50,9 +50,9 @@ begin
 end
 $$language plpgsql;
 
--- drop trigger especialidade_med on analise;
--- create trigger especialidade_med before insert on analise
--- for each row execute procedure especialidade_med_proc();
+drop trigger especialidade_med on analise;
+create trigger especialidade_med before insert on analise
+for each row execute procedure especialidade_med_proc();
 
 
 
