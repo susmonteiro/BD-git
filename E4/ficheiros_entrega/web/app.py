@@ -685,8 +685,9 @@ def listarGlicemia():
 @app.route('/venda')
 def vendaFarm():
 	try:
-		return render_template('operations.html', name='Venda Farmacia', action=url_for('vendaFarmDB'),\
-			values = {'substancia': 'Substancia', 'quant': 'Quantidade', 'preco': 'Preco', 'inst': 'Instituicao', 'num_doente': 'Numero de Doente'})
+		return render_template('operations.html', name='Venda Farmacia', text= 'Caso pretenda fazer uma venda com prescricao insira:', action=url_for('vendaFarmDB'),\
+			edit = {'substancia': 'Substancia', 'quant': 'Quantidade', 'preco': 'Preco', 'inst': 'Instituicao'},\
+			values = {'num_doente': 'Numero de Doente'})
 	except Exception as e:
 		 return render_template('returnMainPage.html', text=str(e))
 

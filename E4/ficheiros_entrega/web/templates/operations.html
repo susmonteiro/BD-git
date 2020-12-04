@@ -9,6 +9,11 @@
                 {% endfor %}
                 <br>
             {% endif %}
+
+            {% if text %}
+            <p> {{ text }} </p>
+            {% endif %}
+
             {% for key in values.keys() %}
             <p>{{ values[key] }}: <input type="text" name="{{ key }}"/></p>
             {% endfor %}
