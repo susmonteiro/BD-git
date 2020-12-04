@@ -44,6 +44,24 @@ ORDER BY (substancia, dia_da_semana, mes);
 
 
 
+
+WITH T (id_tempo, num_concelho, substancia, c) AS (
+    SELECT id_tempo, num_concelho, substancia, COUNT(*) as c 
+    FROM (
+        SELECT id_inst, DI.num_regiao, num_concelho
+        FROM d_instituicao AS DI, regiao AS R
+        WHERE DI.num_regiao = R.num_regiao AND R.nome='Lisboa') AS I 
+        NATURAL JOIN f_presc_venda NATURAL JOIN d_tempo
+    WHERE trimestre = 1 and ano = 2019
+    GROUP BY (id_tempo, num_concelho, substancia)
+)
+SELECT substancia, num_concelho, dia_da_semana, mes, SUM(c), AVG(c)
+FROM T NATURAL JOIN d_tempo
+GROUP BY ROLLUP (substancia, num_concelho, dia_da_semana, mes)
+ORDER BY (substancia, num_concelho, dia_da_semana, mes);
+
+
+
 -- obter quantidade total de prescricoes por dia da semana e mes no primeiro trimestre
 SELECT dia_da_semana, mes, COUNT(*) 
 FROM f_presc_venda NATURAL JOIN d_tempo 
@@ -72,22 +90,7 @@ ORDER BY (dia_da_semana, mes, num_concelho, substancia);
 
 
 
-WITH T (id_tempo, num_concelho, substancia, c) AS (
-    SELECT id_tempo, num_concelho, substancia, COUNT(*) as c 
-    FROM (
-        SELECT id_inst, DI.num_regiao, num_concelho
-        FROM d_instituicao AS DI, regiao AS R
-        WHERE DI.num_regiao = R.num_regiao AND R.nome='Lisboa') AS I 
-        NATURAL JOIN f_presc_venda NATURAL JOIN d_tempo
-    WHERE trimestre = 1 and ano = 2020
-    GROUP BY (id_tempo, num_concelho, substancia)
-)
-SELECT substancia, num_concelho, dia_da_semana, mes, SUM(c), AVG(c)
-FROM T NATURAL JOIN d_tempo
-GROUP BY GROUPING SETS (
-    --(substancia, num_concelho, mes, dia_da_semana),
-    ROLLUP (substancia, num_concelho, dia_da_semana, mes))
-ORDER BY (substancia, num_concelho, dia_da_semana, mes);
+
 
 
 
