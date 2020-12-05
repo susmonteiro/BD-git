@@ -84,7 +84,7 @@ namesFile = open("names.txt", "r")
 nameLines = namesFile.readlines()
 especialidadeFile = open("especialidades.txt", "r")
 especialidadeLines = especialidadeFile.readlines()
-for med in range(1, 150):
+for med in range(150, 300):
     # num_cedula = str(random.randint(1000, 9999))
     num_cedula = str(med)
     allNumCedula.append(num_cedula)
@@ -100,7 +100,7 @@ instFile = open("inst.txt", "r")
 instLines = instFile.readlines()
 allConsulta = []
 
-for i in range(1, 500):
+for i in range(500, 1000):
     num_doente = str(i)
     allNumDoente.append(num_doente)
 
@@ -109,11 +109,11 @@ for i in range(1, 500):
 
     outSql.write("insert into consulta values (" + tpl[0] + ", " + tpl[1] + ", '" + tpl[2] + "', '" + random.choice(instLines)[:-1] + "');\n")
 
-for i in range(550):
-    tpl = (str(random.choice(allNumCedula)), random.choice(allNumDoente), random.choice(allDatas))
-    allConsulta.append(tpl)
+# for i in range(550):
+#     tpl = (str(random.choice(allNumCedula)), random.choice(allNumDoente), random.choice(allDatas))
+#     allConsulta.append(tpl)
 
-    outSql.write("insert into consulta values (" + tpl[0] + ", " + tpl[1] + ", '" + tpl[2] + "', '" + random.choice(instLines)[:-1] + "');\n")
+#     outSql.write("insert into consulta values (" + tpl[0] + ", " + tpl[1] + ", '" + tpl[2] + "', '" + random.choice(instLines)[:-1] + "');\n")
 instFile.close()
 
 
@@ -159,7 +159,7 @@ instFile = open("inst.txt", "r")
 analiseFile = open("analises.txt", "r")
 analiseLines = analiseFile.readlines()
 instLines = instFile.readlines()
-for i in range(1, 800):
+for i in range(800, 1200):
     # num_analise = str(random.randint(1000, 9999))
     num_analise = str(i) 
     tpl = random.choice(allConsulta)
@@ -186,9 +186,9 @@ instFile.close()
 
 
 # Venda Farmacia
-outSql.write("\n-- Vende_Farmacia\n")
+outSql.write("\n-- Venda_Farmacia\n")
 allNumVenda = []
-for i in range(1, 450):
+for i in range(450, 850):
     allNumVenda.append(i)
     preco = random.randint(1,50)
     tpl = random.choice(allPrescricao)
@@ -202,7 +202,7 @@ for i in range(1, 450):
         str(preco) + ", '" + \
         random.choice(allFarmacias) + "');\n")
 
-numVenda = 450
+numVenda = 850
 for lst in allArouca:
     numVenda += 1
     subs = "Aspirina"
@@ -225,7 +225,7 @@ for lst in allArouca:
 # Prescricao Venda
 outSql.write("\n-- Prescricao_venda\n")
 
-for i in range(400):
+for i in range(400, 700):
     tpl = random.choice(allPrescricao)
     allPrescricao.remove(tpl)
     n_venda = random.choice(allNumVenda)
