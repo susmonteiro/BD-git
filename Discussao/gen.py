@@ -229,6 +229,7 @@ for i in range(450):
 numVenda = 450
 for lst in allArouca:
     numVenda += 1
+    allNumVenda.append(numVenda)
     subs = "Aspirina"
     quant = random.randint(1,9)
     preco = random.randint(1,50)
