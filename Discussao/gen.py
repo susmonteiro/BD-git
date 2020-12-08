@@ -225,10 +225,11 @@ for i in range(450):
         str(preco) + ", '" + \
         random.choice(allFarmacias) + "');\n")
 
+allNumVendaArouca = list()
 numVenda = 450
 for lst in allArouca:
     numVenda += 1
-    allNumVenda.append(numVenda)
+    allNumVendaArouca.append(numVenda)
     subs = "Aspirina"
     quant = random.randint(1,9)
     preco = random.randint(1,50)
@@ -250,7 +251,7 @@ for lst in allArouca:
 outSql.write("\n-- Prescricao_venda\n")
 
 for i in range(800):
-    if len(allPrescricao) == 0 or len(allNumVenda) - len(allArouca) == 0:
+    if len(allPrescricao) == 0 or len(allNumVenda) == 0:
         break
     tpl = random.choice(allPrescricao)
     allPrescricao.remove(tpl)
@@ -266,8 +267,8 @@ for i in range(800):
 for lst in allArouca:
     subs = "Aspirina"
     quant = random.randint(1,9)
-    n_venda = random.choice(allNumVenda)
-    allNumVenda.remove(n_venda)
+    n_venda = random.choice(allNumVendaArouca)
+    allNumVendaArouca.remove(n_venda)
     # num_cedula, num_doente, data, instituicao, numVenda
     outSql.write("insert into prescricao_venda values (" + lst[0] + ", " + lst[1] + ", '" + lst[2] + "', '" + subs + "', " + lst[4] + ");\n")
        
