@@ -267,6 +267,7 @@ for lst in allArouca:
     subs = "Aspirina"
     quant = random.randint(1,9)
     n_venda = random.choice(allNumVenda)
+    allNumVenda.remove(n_venda)
     # num_cedula, num_doente, data, instituicao, numVenda
     outSql.write("insert into prescricao_venda values (" + lst[0] + ", " + lst[1] + ", '" + lst[2] + "', '" + subs + "', " + lst[4] + ");\n")
        
