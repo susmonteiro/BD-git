@@ -1,0 +1,50 @@
+Glicémia
+Ureia
+Creatinina
+Ácido úrico
+Amoníaco
+Proteínas plasmáticas
+Lipídeos plasmáticos
+Corpos cetônicos
+Bilirrubina
+Cálcio
+Fósforo
+Potássio
+Ferro sérico
+Sódio
+Magnésio
+Transferrina
+Diagnósticos dos desequilíbrios hidreletrolíticos
+Diagnóstico dos desequilíbrios ácido básicos
+Fosfatase alcalina e ácida
+amilase
+lipase
+aldolase
+lactato-desidrogenase
+transaminases
+creatinofosfoquinase
+gamaglutamiltranspeptidase
+isoenzimas de lactato-desidrogenase
+isoenzimas de creatinofosfoquinase
+Hemácias
+hemoglobina
+hematócrito
+valores hematimétricos
+Leucograma
+granulocitos: neutrófilos
+eosinófilos
+basófilos
+agranulocitos: linfócitos e monócitos
+Análise bioquímica
+análise macroscópica microscopia de sedimento
+estudo bacteriológico
+Exame de fezes
+Exame macroscópico
+exame microscópico
+parasitas
+protozoários
+coprocultura
+Líquido cefalorraquidiano
+Escarro
+Líquido pleural
+Espermograma

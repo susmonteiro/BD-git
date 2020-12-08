@@ -1,0 +1,118 @@
+Inspeção-Geral das Atividades em Saúde (IGAS)
+Direção-Geral da Saúde (DGS)
+Serviço de Intervenção nos Comportamentos Aditivos e nas Dependências (SICAD), I.P
+Administração Central do Sistema de Saúde (ACSS), I.P
+INFARMED – Autoridade Nacional do Medicamento e Produtos de Saúde, I.P
+Instituto Nacional de Emergência Médica (INEM), I.P
+Instituto Português do Sangue e Transplantação (IPST), I.P
+Instituto Nacional de Saúde Doutor Ricardo Jorge (INSA), IP
+Administração Regional de Saúde do Norte
+Administração Regional de Saúde do Centro
+Administração Regional de Saúde de Lisboa e Vale do Tejo
+Administração Regional de Saúde do Alentejo
+Administração Regional de Saúde do Algarve
+Entidade Reguladora da Saúde (ERS)
+Conselho Nacional de Saúde
+Conselho Nacional de Saúde Mental
+SPMS – Serviços Partilhados do Ministério da Saúde, EPE
+Serviço de Utilização Comum dos Hospitais (SUCH)
+Instituto Português de Oncologia de Lisboa Francisco Gentil (IPO), EPE
+Hospital de Braga, EPE
+Unidade Local de Saúde de Castelo Branco, EPE
+Unidade Local de Saúde de Matosinhos, EPE
+Unidade Local de Saúde do Alto Minho, EPE
+Unidade Local de Saúde da Guarda, EPE
+Unidade Local de Saúde do Baixo Alentejo, EPE
+Unidade Local de Saúde do Litoral Alentejano, EPE
+Unidade Local de Saúde do Norte Alentejano, EPE
+Unidade Local de Saúde do Nordeste, EPE
+Centro Hospitalar Universitário do Porto, EPE
+Centro Hospitalar de Entre Douro e Vouga, EPE
+Centro Hospitalar de Trás-os-Montes e Alto Douro, EPE
+Hospital da Senhora da Oliveira Guimarães, EPE
+Centro Hospitalar do Médio Ave, EPE
+Centro Hospitalar Universitário de S. João, EPE
+Centro Hospitalar Póvoa de Varzim/Vila do Conde, EPE
+Centro Hospitalar Tâmega e Sousa, EPE
+Centro Hospitalar de Vila Nova de Gaia/Espinho, EPE
+Centro Hospitalar Tondela Viseu, EPE
+Centro Hospitalar Leiria, EPE
+Centro Hospitalar e Universitário de Coimbra, EPE
+Centro Hospitalar Universitário Cova da Beira, EPE
+Centro Hospitalar Médio Tejo, EPE
+Centro Hospitalar Barreiro Montijo, EPE
+Centro Hospitalar Universitário de Lisboa Norte, EPE
+Centro Hospitalar de Lisboa Ocidental, EPE
+Centro Hospitalar de Setúbal, EPE
+Centro Hospitalar Universitário do Algarve, EPE
+Centro Hospitalar do Baixo Vouga, EPE
+Centro Hospitalar Universitário Lisboa Central, EPE
+Hospital de Magalhães Lemos, EPE
+Hospital Santa Maria Maior, EPE – Barcelos
+Hospital Distrital Figueira da Foz, EPE
+Instituto Português de Oncologia de Coimbra Francisco Gentil (IPO), EPE
+Hospital de Santarém, EPE
+Hospital Garcia de Orta, EPE
+Hospital Professor Doutor Fernando Fonseca, EPE
+Instituto Português de Oncologia do Porto Francisco Gentil (IPO), EPE
+Hospital Espírito Santo, EPE – Évora
+Centro Hospitalar do Oeste, EPE
+Centro Hospitalar Psiquiátrico de Lisboa
+Centro de Medicina de Reabilitação da Região Centro – Rovisco Pais
+Hospital Arcebispo João Crisóstomo – Cantanhede
+Hospital Dr. Francisco Zagalo – Ovar
+Instituto de Oftalmologia Dr. Gama Pinto
+Agrupamento de Centros de Saúde Almada-Seixal
+Agrupamento de Centros de Saúde Amadora
+Agrupamento de Centros de Saúde Arco Ribeirinho
+Agrupamento de Centros de Saúde Arrábida
+Agrupamento de Centros de Saúde Cascais
+Agrupamento de Centros de Saúde Estuário do Tejo
+Agrupamento de Centros de Saúde Lezíria
+Agrupamento de Centros de Saúde Baixo Alentejo
+Agrupamento de Centros de Saúde Baixo Vouga
+Agrupamento de Centros de Saúde Lisboa Central
+Agrupamento de Centros de Saúde Lisboa Norte
+Agrupamento de Centros de Saúde Lisboa Ocidental e Oeiras
+Agrupamento de Centros de Saúde Loures-Odivelas
+Agrupamento de Centros de Saúde Médio Tejo
+Agrupamento de Centros de Saúde Oeste Norte
+Agrupamento de Centros de Saúde Oeste Sul
+Agrupamento de Centros de Saúde Sintra
+Agrupamento de Centros de Saúde de Trás-os-Montes – Alto Tâmega e Barroso
+Agrupamento de Centros de Saúde do Douro I – Marão e Douro Norte
+Agrupamento de Centros de Saúde do Douro II – Douro Sul
+Agrupamento de Centros de Saúde do Alto Ave
+Agrupamento de Centros de Saúde do Ave – Famalicão
+Agrupamento de Centros de Saúde do Cávado I – Braga
+Agrupamento de Centros de Saúde do Cávado II – Gerês/Cabreira
+Agrupamento de Centros de Saúde do Cávado III – Barcelos/Esposende
+Agrupamento de Centros de Saúde do Tâmega I – Baixo Tâmega
+Agrupamento de Centros de Saúde do Tâmega II – Vale do Sousa Sul
+Agrupamento de Centros de Saúde do Tâmega III – Vale do Sousa Norte
+Agrupamento de Centros de Saúde do Grande Porto I – Santo Tirso/Trofa
+Agrupamento de Centros de Saúde do Grande Porto II – Gondomar
+Agrupamento de Centros de Saúde do Grande Porto III – Maia/Valongo
+Agrupamento de Centros de Saúde do Grande Porto IV – Póvoa de Varzim/Vila do Conde
+Agrupamento de Centros de Saúde do Grande Porto V – Porto Ocidental
+Agrupamento de Centros de Saúde do Grande Porto VI – Porto Oriental
+Agrupamento de Centros de Saúde do Grande Porto VII – Gaia
+Agrupamento de Centros de Saúde do Grande Porto VIII – Espinho/Gaia
+Agrupamento de Centros de Saúde de Entre Douro e Vouga I – Feira/Arouca
+Agrupamento de Centros de Saúde de Entre Douro e Vouga II – Aveiro Norte
+Agrupamento de Centros de Saúde da Cova da Beira
+Agrupamento de Centros de Saúde do Baixo Mondego
+Agrupamento de Centros de Saúde do Dão – Lafões
+Agrupamento de Centros de Saúde do Pinhal Interior Norte
+Agrupamento de Centros de Saúde do Pinhal Litoral
+Agrupamento de Centros de Saúde do Alentejo Central
+Agrupamento de Centros de Saúde do Algarve I – Central
+Agrupamento de Centros de Saúde do Algarve II – Barlavento
+Agrupamento de Centros de Saúde do Algarve III – Sotavento
+Hospital Beatriz Ângelo
+Hospital de Vila Franca de Xira
+Hospital de Cascais Dr. José de Almeida
+Hospitais geridos pelas Misericórdias
+Hospital de S. Paulo – Serpa
+Hospital Luciano de Castro – Anadia
+Hospital São José – Fafe
