@@ -155,14 +155,13 @@ for i in range(500):
     if i % 9 == 0:
         subs = 'Aspirina'
     tpl = random.choice(allConsulta)
-    tpl_new = list(tpl) + [subs, quant]
+    tpl_new = list(tpl[:3]) + [subs, quant]
     allPrescricao.append(tpl_new)
 
     if i % 4 == 0:
         for c in allConsulta:
             if c[2] == tpl[2] and c[3] == tpl[3] and c != tpl: # data equal, inst equal, but not the same consulta
-                tpl2 = c
-                tpl2_new = list(c) + [subs, quant]
+                tpl2_new = list(c[:3]) + [subs, quant]
                 allPrescricao.append(tpl2_new)
                 outSql.write("insert into prescricao values (" + c[0] + ", " + c[1] + ", '" + c[2] + "', '" + subs + "', " + str(quant) + ");\n")
         
