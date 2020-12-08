@@ -112,14 +112,21 @@ instFile = open("inst.txt", "r")
 instLines = instFile.readlines()
 allConsulta = []
 
-for i in range(500):
+max_conulta_range = 500
+for i in range(max_conulta_range):
     num_doente = str(i)
     allNumDoente.append(num_doente)
 
-    tpl = (str(random.choice(allNumCedula)), num_doente, random.choice(allDatas))
+    tpl = (str(random.choice(allNumCedula)), num_doente, random.choice(allDatas), random.choice(instLines)[:-1])
     allConsulta.append(tpl)
 
-    outSql.write("insert into consulta values (" + tpl[0] + ", " + tpl[1] + ", '" + tpl[2] + "', '" + random.choice(instLines)[:-1] + "');\n")
+    if i % 4 == 0:
+        newtpl = (str(random.choice(allNumCedula)), str(i+max_conulta_range), tpl[2], tpl[3])
+        allConsulta.append(newtpl)
+        outSql.write("insert into consulta values (" + newtpl[0] + ", " + newtpl[1] + ", '" + newtpl[2] + "', '" + newtpl[3] + "');\n")
+
+
+    outSql.write("insert into consulta values (" + tpl[0] + ", " + tpl[1] + ", '" + tpl[2] + "', '" + tpl[3] + "');\n")
 
 instFile.close()
 
@@ -150,6 +157,16 @@ for i in range(500):
     tpl = random.choice(allConsulta)
     tpl_new = list(tpl) + [subs, quant]
     allPrescricao.append(tpl_new)
+
+    if i % 4 == 0:
+        for c in allConsulta:
+            if c[2] == tpl[2] and c[3] == tpl[3] and c != tpl: # data equal, inst equal, but not the same consulta
+                tpl2 = c
+                tpl2_new = list(c) + [subs, quant]
+                allPrescricao.append(tpl2_new)
+                outSql.write("insert into prescricao values (" + c[0] + ", " + c[1] + ", '" + c[2] + "', '" + subs + "', " + str(quant) + ");\n")
+        
+
     outSql.write("insert into prescricao values (" + tpl[0] + ", " + tpl[1] + ", '" + tpl[2] + "', '" + subs + "', " + str(quant) + ");\n")
 medFile.close()
 
@@ -232,7 +249,9 @@ for lst in allArouca:
 # Prescricao Venda
 outSql.write("\n-- Prescricao_venda\n")
 
-for i in range(400):
+for i in range(800):
+    if len(allPrescricao) == 0 or len(allNumVenda) - len(allArouca) == 0:
+        break
     tpl = random.choice(allPrescricao)
     allPrescricao.remove(tpl)
     n_venda = random.choice(allNumVenda)
