@@ -57,7 +57,7 @@ insert into venda_farmacia values (815, '2019-02-06', 'Alirocumabe', 3, 23, 'tes
 insert into venda_farmacia values (816, '2019-02-06', 'Aspirina', 3, 23, 'testQ');
 
 
-insert into prescricao_venda values (8989, 901, '2012001-9', 'Aspirina', 801);
+insert into prescricao_venda values (8989, 901, '2020-01-9', 'Aspirina', 801);
 insert into prescricao_venda values (8989, 902, '2020-01-9', 'Aspirina', 802);
 insert into prescricao_venda values (8989, 903, '2020-01-9', 'Alirocumabe', 803);
 insert into prescricao_venda values (8989, 904, '2020-01-9', 'Alirocumabe', 804);
